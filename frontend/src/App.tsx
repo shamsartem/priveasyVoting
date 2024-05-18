@@ -1,10 +1,12 @@
 import { Outlet, createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import CssBaseline from "@mui/material/CssBaseline";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Create } from "./pages/Create";
 import { Vote } from "./pages/Vote";
 import { Results } from "./pages/Results";
+import LayoutComponent from "./Layout.js";
 
 const router = createBrowserRouter([
   {
@@ -36,9 +38,18 @@ const router = createBrowserRouter([
 ]);
 
 export function App() {
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  return (
+    <>
+      <CssBaseline />
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+    </>
+  );
 }
 
 function Layout() {
-  return <Outlet />;
+  return (
+    <LayoutComponent>
+      <Outlet />
+    </LayoutComponent>
+  );
 }

@@ -1,4 +1,3 @@
-import { Nav } from "../components/Nav";
 import { Connect } from "../components/Connect";
 import { Account } from "../components/Account";
 import { NetworkSwitcher } from "../components/NetworkSwitcher";
@@ -15,12 +14,22 @@ import { WatchPendingTransactions } from "../components/WatchPendingTransactions
 import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import { useEthereum } from "../components/Context";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Hero from "../components/Hero";
+import Highlights from "../components/Highlights";
+import FAQ from "../components/FAQ";
 
 export function Home() {
   const { account } = useEthereum();
   return (
     <div>
-      <Nav />
+      <Hero />
+      <Box sx={{ bgcolor: "background.default" }}>
+        <Highlights />
+        <Divider />
+        <FAQ />
+      </Box>
       <h2>Home</h2>
       <>
         <h1>zkSync + ethers + Vite</h1>

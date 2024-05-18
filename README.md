@@ -4,6 +4,7 @@
 
 ### zkSync Sepolia
 ProposalFactory: `0xEf8f786079C7c0F26d02E52A9081a9903D991ba6`
+GaslessPaymaster: `0x1C16802A3EFa35cCB057D036bd683700A47aEd4e`
 
 ## Project Description
 

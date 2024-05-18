@@ -17,7 +17,6 @@ export const getProvider = () => {
 
   // Initialize zkSync Provider
   const provider = new Provider(rpcUrl);
-
   return provider;
 };
 
@@ -110,6 +109,7 @@ export const deployVotingContract = async (
     });
 
   // Deploy the eligibility contract first
+  log("Deploying eligibility contract...");
   const eligibilityContract = await deployer.deploy(eligibilityArtifact, constructorArguments.slice(0, -1));
   const eligibilityAddress = await eligibilityContract.getAddress();
 
@@ -129,6 +129,7 @@ export const deployVotingContract = async (
   await verifyEnoughBalance(wallet, deploymentFee);
 
   // Deploy the main voting contract to zkSync
+  log("Deploying main contract...");
   const contract = await deployer.deploy(contractArtifact, updatedConstructorArguments);
   const address = await contract.getAddress();
   const constructorArgs = contract.interface.encodeDeploy(updatedConstructorArguments);

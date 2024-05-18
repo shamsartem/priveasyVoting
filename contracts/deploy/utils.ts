@@ -67,6 +67,8 @@ type DeployContractOptions = {
 export const deployVotingContract = async (
   contractType: string,
   eligibilityType: string,
+  proposalName: string,
+  proposalDescription: string,
   constructorArguments: any[],
   options?: DeployContractOptions,
 ) => {
@@ -74,7 +76,7 @@ export const deployVotingContract = async (
     if (!options?.silent) console.log(message);
   };
 
-  log(`\nStarting deployment process of "${contractType}"...`);
+  log(`\nStarting deployment process of "${proposalName}", type:"${contractType}"...`);
 
   const wallet = options?.wallet ?? getWallet();
   const deployer = new Deployer(hre, wallet);
@@ -110,13 +112,13 @@ export const deployVotingContract = async (
 
   // Deploy the eligibility contract first
   log("Deploying eligibility contract...");
-  const eligibilityContract = await deployer.deploy(eligibilityArtifact, constructorArguments.slice(0, -1));
+  const eligibilityContract = await deployer.deploy(eligibilityArtifact, constructorArguments.slice(0, 1));
   const eligibilityAddress = await eligibilityContract.getAddress();
 
   log(`Deployed eligibility contract at: ${eligibilityAddress}`);
 
-  // Adjust the constructor arguments to include the deployed eligibility contract address
-  const updatedConstructorArguments = [eligibilityAddress, constructorArguments[constructorArguments.length - 1]];
+  // Adjust the constructor arguments to include the deployed eligibility contract address and the new parameters
+  const updatedConstructorArguments = [eligibilityAddress, constructorArguments[1], proposalName, proposalDescription];
 
   // Estimate contract deployment fee
   const deploymentFee = await deployer.estimateDeployFee(

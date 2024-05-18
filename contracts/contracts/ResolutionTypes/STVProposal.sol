@@ -11,10 +11,17 @@ contract STVProposal is BaseProposal {
     error AlreadyVoted();
     error InvalidCandidate();
 
-    constructor(address _eligibilityContract, uint256 _proposalLength) {
+    constructor(
+        address _eligibilityContract,
+        uint256 _proposalLength,
+        string memory _proposalName,
+        string memory _proposalDescription
+        ) {
         eligibilityContract = IEligibility(_eligibilityContract);
         proposalLength = _proposalLength;
         startTime = block.timestamp;
+        proposalName = _proposalName;
+        proposalDescription = _proposalDescription;
     }
 
     function isEligible(address _voter, bytes32 _votingID) public view override returns (bool) {

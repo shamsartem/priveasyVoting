@@ -23,6 +23,9 @@ abstract contract BaseProposal {
     uint256 public winnerCandidateId;
     bool public winnerDeclared;
 
+    string public proposalName;
+    string public proposalDescription;
+
 	error NotEligibleToVote();
     error VotingPeriodOver();
     error WinnerAlreadyDeclared();

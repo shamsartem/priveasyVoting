@@ -34,6 +34,8 @@ contract ProposalFactory {
     function createProposal(
         VotingResolution _resolution,
         VotingParticipant _participant,
+        string memory _proposalName,
+        string memory _proposalDescription,
         uint256 _proposalLength,
         address _tokenAddress,
         address _nftAddress,
@@ -66,13 +68,13 @@ contract ProposalFactory {
 
         // Create the appropriate voting contract
         if (_resolution == VotingResolution.FPTP) {
-            proposalContract = new FPTPProposal(address(eligibilityContract), _proposalLength);
+            proposalContract = new FPTPProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
         } else if (_resolution == VotingResolution.RCV) {
-            proposalContract = new RCVProposal(address(eligibilityContract), _proposalLength);
+            proposalContract = new RCVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
         } else if (_resolution == VotingResolution.STV) {
-            proposalContract = new STVProposal(address(eligibilityContract), _proposalLength);
+            proposalContract = new STVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
         } else if (_resolution == VotingResolution.QV) {
-            proposalContract = new QVProposal(address(eligibilityContract), _proposalLength);
+            proposalContract = new QVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
         } else {
             revert UnsupportedVotingResolution();
         }

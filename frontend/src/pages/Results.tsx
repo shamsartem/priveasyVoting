@@ -44,6 +44,7 @@ type Proposal = {
   proposalType: ProposalType;
   proposalLength: number;
   startTime: number;
+  winnerDeclared: boolean;
   candidates: CandidateWithVotes[];
 };
 
@@ -83,6 +84,7 @@ export function Results() {
       proposalType: Number(await contract.proposalType()) as ProposalType,
       proposalLength: Number(await contract.proposalLength()),
       startTime: Number(await contract.startTime()),
+      winnerDeclared: (await contract.winnerDeclared()) as boolean,
       candidates,
     };
   });
@@ -90,6 +92,10 @@ export function Results() {
   useEffect(() => {
     getProposal();
   }, [id]);
+
+  function handleWinnerDeclared() {
+    getProposal();
+  }
 
   return (
     <PageWrapper>
@@ -117,25 +123,75 @@ export function Results() {
             disabled
             value={dayjs((proposal.startTime + proposal.proposalLength) * 1000)}
           />
-          <PieChart
-            series={[
-              {
-                data: proposal.candidates.map(({ name, votes }, id) => {
-                  return {
-                    id,
-                    label: name,
-                    value: votes,
-                  };
-                }),
-              },
-            ]}
-            width={400}
-            height={200}
-          />
+          {proposal.winnerDeclared ? (
+            <PieChart
+              series={[
+                {
+                  data: proposal.candidates.map(({ name, votes }, id) => {
+                    return {
+                      id,
+                      label: name,
+                      value: votes,
+                    };
+                  }),
+                },
+              ]}
+              width={400}
+              height={200}
+            />
+          ) : (
+            <DeclareWinner id={id} onWinnerDeclared={handleWinnerDeclared} />
+          )}
         </>
       )}
       {inProgress && <div>Loading proposal...</div>}
       {error && <div>Error: {error?.message}</div>}
     </PageWrapper>
+  );
+}
+
+function DeclareWinner(props: { id: string; onWinnerDeclared: () => void }) {
+  const { getSigner, getProvider } = useEthereum();
+  const {
+    result: transaction,
+    execute: writeContract,
+    inProgress,
+    error,
+  } = useAsync(async () => {
+    const contract = new Contract(props.id, baseProposalAbi, await getSigner());
+    const tx = await contract.declareWinner();
+    waitForReceipt(tx.hash);
+    props.onWinnerDeclared();
+    return tx;
+  });
+
+  const {
+    result: receipt,
+    execute: waitForReceipt,
+    inProgress: receiptInProgress,
+    error: receiptError,
+  } = useAsync(async (transactionHash) => {
+    return await getProvider()!.waitForTransaction(transactionHash);
+  });
+  return (
+    <>
+      <div>Votes are private until the winner is declared</div>
+      <Button
+        variant="contained"
+        onClick={() => {
+          writeContract();
+        }}
+      >
+        Declare winner
+      </Button>
+      <TxInfo
+        inProgress={inProgress}
+        error={error}
+        receipt={receipt}
+        receiptInProgress={receiptInProgress}
+        receiptError={receiptError}
+        transaction={transaction}
+      />
+    </>
   );
 }

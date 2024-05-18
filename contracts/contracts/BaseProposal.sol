@@ -14,6 +14,7 @@ abstract contract BaseProposal {
     mapping(uint256 => Candidate) public candidates;
     uint256 public candidateCount;
 
+    Types.ProposalType public proposalType;
     Types.EligibilityType public eligibilityType;
 
     mapping(address => bool) public hasVoted;
@@ -32,7 +33,6 @@ abstract contract BaseProposal {
     error WinnerAlreadyDeclared();
     error WinnerNotDeclared();
     error InvalidVote();
-    error AlreadyVoted();
 
     modifier onlyEligibleVoters(bytes32 _votingID) {
         if (!isEligible(msg.sender, _votingID)) {
@@ -48,7 +48,7 @@ abstract contract BaseProposal {
         _;
     }
 
-    function addCandidate(string memory _name, string memory _description, string memory _photo) public {
+    function addCandidate(string memory _name, string memory _description, string memory _photo) internal {
         candidates[candidateCount] = Candidate(_name, _description, _photo, 0);
         candidateCount++;
     }

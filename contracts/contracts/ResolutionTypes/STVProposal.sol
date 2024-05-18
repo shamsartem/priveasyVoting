@@ -9,6 +9,8 @@ import "../Types.sol";
 contract STVProposal is BaseProposal {
     IEligibility public eligibilityContract;
 
+    error AlreadyVoted();
+
     constructor(
         address _eligibilityContract,
         uint256 _proposalLength,
@@ -25,6 +27,7 @@ contract STVProposal is BaseProposal {
         proposalName = _proposalName;
         proposalDescription = _proposalDescription;
         eligibilityType = _eligibilityType;
+        proposalType = Types.ProposalType.STV;
 
         for (uint256 i = 0; i < _candidateNames.length; i++) {
             addCandidate(_candidateNames[i], _candidateDescriptions[i], _candidatePhotos[i]);

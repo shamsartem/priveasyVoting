@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
-// Base contract for voting containing the basic logic for voting shared by all voting types
+import "./Types.sol";
+
 abstract contract BaseProposal {
     struct Candidate {
         string name;
@@ -13,8 +14,7 @@ abstract contract BaseProposal {
     mapping(uint256 => Candidate) public candidates;
     uint256 public candidateCount;
 
-    enum VotingParticipant { TokenHolders, NFTHolders, Address, Email, Open }
-    VotingParticipant public votingParticipant;
+    Types.EligibilityType public eligibilityType;
 
     mapping(address => bool) public hasVoted;
 
@@ -27,21 +27,16 @@ abstract contract BaseProposal {
     string public proposalName;
     string public proposalDescription;
 
-    address public admin;
-
-    error AlreadyVoted();
     error NotEligibleToVote();
     error VotingPeriodOver();
     error WinnerAlreadyDeclared();
     error WinnerNotDeclared();
     error InvalidVote();
-    error NotAuthorized();
-    error InvalidCandidate();
-    error CandidateDataLengthMismatch();
+    error AlreadyVoted();
 
-    modifier onlyAdmin() {
-        if (msg.sender != admin) {
-            revert NotAuthorized();
+    modifier onlyEligibleVoters(bytes32 _votingID) {
+        if (!isEligible(msg.sender, _votingID)) {
+            revert NotEligibleToVote();
         }
         _;
     }
@@ -53,39 +48,9 @@ abstract contract BaseProposal {
         _;
     }
 
-    modifier onlyEligibleVoters(bytes32 _votingID) {
-        if (!isEligible(msg.sender, _votingID)) {
-            revert NotEligibleToVote();
-        }
-        _;
-    }
-
-    constructor(
-        string memory _proposalName,
-        string memory _proposalDescription,
-        VotingParticipant _votingParticipant,
-        string[] memory _candidateNames,
-        string[] memory _candidateDescriptions,
-        string[] memory _candidatePhotos
-    ) {
-        if (_candidateNames.length != _candidateDescriptions.length || _candidateNames.length != _candidatePhotos.length) {
-            revert CandidateDataLengthMismatch();
-        }
-
-        admin = msg.sender;
-        proposalName = _proposalName;
-        proposalDescription = _proposalDescription;
-        votingParticipant = _votingParticipant;
-
-        for (uint256 i = 0; i < _candidateNames.length; i++) {
-            candidates[candidateCount] = Candidate({
-                name: _candidateNames[i],
-                description: _candidateDescriptions[i],
-                photo: _candidatePhotos[i],
-                votes: 0
-            });
-            candidateCount++;
-        }
+    function addCandidate(string memory _name, string memory _description, string memory _photo) public {
+        candidates[candidateCount] = Candidate(_name, _description, _photo, 0);
+        candidateCount++;
     }
 
     function isEligible(address _voter, bytes32 _votingID) public view virtual returns (bool);
@@ -96,7 +61,7 @@ abstract contract BaseProposal {
         Candidate memory candidate = candidates[_candidateId];
         return (candidate.name, candidate.description, candidate.photo, candidate.votes);
     }
-
+    
     function hasVotingEnded() public view returns (bool) {
         return block.timestamp > startTime + proposalLength;
     }

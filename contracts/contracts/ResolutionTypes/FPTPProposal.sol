@@ -4,6 +4,7 @@ pragma solidity 0.8.20;
 import "../BaseProposal.sol";
 import "../ParticipantTypes/IEligibility.sol";
 import "../ParticipantTypes/EmailEligibility.sol";
+import "../Types.sol";
 
 contract FPTPProposal is BaseProposal {
     IEligibility public eligibilityContract;
@@ -13,16 +14,21 @@ contract FPTPProposal is BaseProposal {
         uint256 _proposalLength,
         string memory _proposalName,
         string memory _proposalDescription,
-        VotingParticipant _votingParticipant,
+        Types.EligibilityType _eligibilityType,
         string[] memory _candidateNames,
         string[] memory _candidateDescriptions,
         string[] memory _candidatePhotos
-    )
-        BaseProposal(_proposalName, _proposalDescription, _votingParticipant, _candidateNames, _candidateDescriptions, _candidatePhotos)
-    {
+    ) {
         eligibilityContract = IEligibility(_eligibilityContract);
         proposalLength = _proposalLength;
         startTime = block.timestamp;
+        proposalName = _proposalName;
+        proposalDescription = _proposalDescription;
+        eligibilityType = _eligibilityType;
+
+        for (uint256 i = 0; i < _candidateNames.length; i++) {
+            addCandidate(_candidateNames[i], _candidateDescriptions[i], _candidatePhotos[i]);
+        }
     }
 
     function isEligible(address _voter, bytes32 _votingID) public view override returns (bool) {
@@ -34,24 +40,14 @@ contract FPTPProposal is BaseProposal {
             revert AlreadyVoted();
         }
         if (_candidateId >= candidateCount) {
-            revert InvalidCandidate();
+            revert Types.InvalidCandidate();
         }
 
         candidates[_candidateId].votes++;
         hasVoted[msg.sender] = true;
 
-        // Check if the eligibility contract is EmailEligibility by reading the state variable
-        if (isEmailEligibilityContract()) {
+        if (eligibilityType == Types.EligibilityType.Email) {
             EmailEligibility(address(eligibilityContract)).useVotingID(_votingID);
-        }
-    }
-
-    function isEmailEligibilityContract() internal view returns (bool) {
-        // Check if the eligibility contract has the isEmailEligibility variable set to true
-        try EmailEligibility(address(eligibilityContract)).isEmailEligibility() returns (bool isEmail) {
-            return isEmail;
-        } catch {
-            return false;
         }
     }
 

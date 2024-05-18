@@ -10,22 +10,18 @@ import "./ParticipantTypes/TokenHoldersEligibility.sol";
 import "./ParticipantTypes/NFTHoldersEligibility.sol";
 import "./ParticipantTypes/AddressEligibility.sol";
 import "./ParticipantTypes/EmailEligibility.sol";
+import "./Types.sol";
 
 contract ProposalFactory {
-    enum ProposalType { FPTP, RCV, STV, QV }
-    enum EligibilityType { TokenHolders, NFTHolders, Address, Email }
-
-    error InvalidProposalType();
-    error InvalidEligibilityType();
+    using Types for *;
 
     function createProposal(
-        ProposalType _proposalType,
-        EligibilityType _eligibilityType,
+        Types.ProposalType _proposalType,
+        Types.EligibilityType _eligibilityType,
         address _tokenAddress,
         uint256 _proposalLength,
         string memory _proposalName,
         string memory _proposalDescription,
-        BaseProposal.VotingParticipant _votingParticipant,
         string[] memory _candidateNames,
         string[] memory _candidateDescriptions,
         string[] memory _candidatePhotos,
@@ -35,67 +31,67 @@ contract ProposalFactory {
         IEligibility eligibilityContract;
         
         // Deploy eligibility contract based on the selected type
-        if (_eligibilityType == EligibilityType.TokenHolders) {
+        if (_eligibilityType == Types.EligibilityType.TokenHolders) {
             eligibilityContract = new TokenHoldersEligibility(_tokenAddress);
-        } else if (_eligibilityType == EligibilityType.NFTHolders) {
+        } else if (_eligibilityType == Types.EligibilityType.NFTHolders) {
             eligibilityContract = new NFTHoldersEligibility(_tokenAddress);
-        } else if (_eligibilityType == EligibilityType.Address) {
+        } else if (_eligibilityType == Types.EligibilityType.Address) {
             eligibilityContract = new AddressEligibility(_eligibleAddresses);
-        } else if (_eligibilityType == EligibilityType.Email) {
+        } else if (_eligibilityType == Types.EligibilityType.Email) {
             eligibilityContract = new EmailEligibility(_votingIDs);
         } else {
-            revert InvalidEligibilityType();
+            revert Types.InvalidEligibilityType();
         }
 
         address proposalContract;
         
         // Deploy the selected proposal type contract
-        if (_proposalType == ProposalType.FPTP) {
+        if (_proposalType == Types.ProposalType.FPTP) {
             proposalContract = address(new FPTPProposal(
                 address(eligibilityContract),
                 _proposalLength,
                 _proposalName,
                 _proposalDescription,
-                _votingParticipant,
+                _eligibilityType,
                 _candidateNames,
                 _candidateDescriptions,
                 _candidatePhotos
             ));
-        } else if (_proposalType == ProposalType.RCV) {
+        } else if (_proposalType == Types.ProposalType.RCV) {
             proposalContract = address(new RCVProposal(
                 address(eligibilityContract),
                 _proposalLength,
                 _proposalName,
                 _proposalDescription,
-                _votingParticipant,
+                _eligibilityType,
                 _candidateNames,
                 _candidateDescriptions,
                 _candidatePhotos
             ));
-        } else if (_proposalType == ProposalType.STV) {
+        } else if (_proposalType == Types.ProposalType.STV) {
             proposalContract = address(new STVProposal(
                 address(eligibilityContract),
                 _proposalLength,
                 _proposalName,
                 _proposalDescription,
-                _votingParticipant,
+                _eligibilityType,
                 _candidateNames,
                 _candidateDescriptions,
                 _candidatePhotos
             ));
-        } else if (_proposalType == ProposalType.QV) {
+        } else if (_proposalType == Types.ProposalType.QV) {
             proposalContract = address(new QVProposal(
                 address(eligibilityContract),
                 _proposalLength,
                 _proposalName,
                 _proposalDescription,
-                _votingParticipant,
+                _eligibilityType,
                 _candidateNames,
                 _candidateDescriptions,
                 _candidatePhotos
             ));
         } else {
-            revert InvalidProposalType();
+            revert Types.InvalidProposalType();
         }
 
         return proposalContract;

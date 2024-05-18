@@ -68,51 +68,6 @@ export function VoteSelect() {
           Visit voting page
         </Button>
       </Box>
-      <RequireConnectedWallet isVoter>
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {mockProposals.map(({ description, name, id }, i) => {
-            return (
-              <>
-                <ListItemButton
-                  alignItems="flex-start"
-                  onClick={() => {
-                    navigate(`/vote/${id}`);
-                  }}
-                  key={i}
-                >
-                  <ListItemAvatar>
-                    <Avatar alt={name} src="/static/images/avatar/1.jpg" />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={name}
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: "inline" }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {description}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItemButton>
-                {i !== mockProposals.length - 1 && (
-                  <Divider
-                    key={`divider_${i}`}
-                    variant="inset"
-                    component="li"
-                  />
-                )}
-              </>
-            );
-          })}
-        </List>
-      </RequireConnectedWallet>
     </PageWrapper>
   );
 }

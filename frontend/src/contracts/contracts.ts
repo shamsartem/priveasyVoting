@@ -1,8 +1,7 @@
-import IERC20 from "./FPTPProposal.json";
 import ProposalFactory from "./ProposalFactory.json";
 import BaseProposal from "./BaseProposal.json";
 
-export const erc20ABI = IERC20;
+export const erc20ABI = ProposalFactory.abi;
 
 export const contractConfig = {
   address: "0x863156066e319DD982fc0804B0a8647086E6EdEc", // zkSync Era Sepolia Testnet DAI token address

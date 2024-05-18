@@ -5,6 +5,11 @@
   "abi": [
     {
       "inputs": [],
+      "name": "InvalidCandidate",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "InvalidVote",
       "type": "error"
     },
@@ -277,6 +282,47 @@
         }
       ],
       "name": "vote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "_candidateId",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_votingID",
+          "type": "bytes32"
+        }
+      ],
+      "name": "voteMulti",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_candidateId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_numVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_votingID",
+          "type": "bytes32"
+        }
+      ],
+      "name": "voteQuadratic",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

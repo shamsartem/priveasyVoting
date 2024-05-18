@@ -69,6 +69,7 @@ export const deployVotingContract = async (
   eligibilityType: string,
   proposalName: string,
   proposalDescription: string,
+  votingParticipant: number,
   constructorArguments: any[],
   options?: DeployContractOptions,
 ) => {
@@ -118,7 +119,16 @@ export const deployVotingContract = async (
   log(`Deployed eligibility contract at: ${eligibilityAddress}`);
 
   // Adjust the constructor arguments to include the deployed eligibility contract address and the new parameters
-  const updatedConstructorArguments = [eligibilityAddress, constructorArguments[1], proposalName, proposalDescription];
+  const updatedConstructorArguments = [
+    eligibilityAddress,
+    constructorArguments[1], // proposalLength
+    proposalName,
+    proposalDescription,
+    votingParticipant,
+    constructorArguments[5], // candidateNames
+    constructorArguments[6], // candidateDescriptions
+    constructorArguments[7]  // candidatePhotos
+  ];
 
   // Estimate contract deployment fee
   const deploymentFee = await deployer.estimateDeployFee(

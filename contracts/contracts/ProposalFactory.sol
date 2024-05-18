@@ -1,95 +1,103 @@
-//SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./ResolutionTypes/FPTPProposal.sol";
-import "./ResolutionTypes/RCVProposal.sol"; 
+import "./ResolutionTypes/RCVProposal.sol";
 import "./ResolutionTypes/STVProposal.sol";
 import "./ResolutionTypes/QVProposal.sol";
+import "./ParticipantTypes/IEligibility.sol";
 import "./ParticipantTypes/TokenHoldersEligibility.sol";
 import "./ParticipantTypes/NFTHoldersEligibility.sol";
 import "./ParticipantTypes/AddressEligibility.sol";
 import "./ParticipantTypes/EmailEligibility.sol";
 
 contract ProposalFactory {
-    enum VotingResolution { FPTP, RCV, STV, QV }
-    enum VotingParticipant { TokenHolders, NFTHolders, Address, Email }
+    enum ProposalType { FPTP, RCV, STV, QV }
+    enum EligibilityType { TokenHolders, NFTHolders, Address, Email }
 
-    struct ProposalInstance {
-        address contractAddress;
-        VotingResolution resolution;
-        VotingParticipant participant;
-    }
-
-    ProposalInstance[] public proposalInstances;
-
-    event ProposalCreated(address indexed contractAddress, VotingResolution resolution, VotingParticipant participant);
-
-    error TokenAddressRequired();
-    error NFTAddressRequired();
-    error EligibleAddressesRequired();
-    error EligibleEmailsRequired();
-    error UnsupportedParticipantType();
-    error UnsupportedVotingResolution();
+    error InvalidProposalType();
+    error InvalidEligibilityType();
 
     function createProposal(
-        VotingResolution _resolution,
-        VotingParticipant _participant,
+        ProposalType _proposalType,
+        EligibilityType _eligibilityType,
+        address _tokenAddress,
+        uint256 _proposalLength,
         string memory _proposalName,
         string memory _proposalDescription,
-        uint256 _proposalLength,
-        address _tokenAddress,
-        address _nftAddress,
+        BaseProposal.VotingParticipant _votingParticipant,
+        string[] memory _candidateNames,
+        string[] memory _candidateDescriptions,
+        string[] memory _candidatePhotos,
         address[] memory _eligibleAddresses,
-        string[] memory _eligibleEmails
-    ) public {
-        BaseProposal proposalContract;
+        bytes32[] memory _votingIDs
+    ) public returns (address) {
         IEligibility eligibilityContract;
-
-        // Create the appropriate eligibility contract
-        if (_participant == VotingParticipant.TokenHolders) {
-            if (_tokenAddress == address(0)) revert TokenAddressRequired();
+        
+        // Deploy eligibility contract based on the selected type
+        if (_eligibilityType == EligibilityType.TokenHolders) {
             eligibilityContract = new TokenHoldersEligibility(_tokenAddress);
-        } else if (_participant == VotingParticipant.NFTHolders) {
-            if (_nftAddress == address(0)) revert NFTAddressRequired();
-            eligibilityContract = new NFTHoldersEligibility(_nftAddress);
-        } else if (_participant == VotingParticipant.Address) {
-            if (_eligibleAddresses.length == 0) revert EligibleAddressesRequired();
+        } else if (_eligibilityType == EligibilityType.NFTHolders) {
+            eligibilityContract = new NFTHoldersEligibility(_tokenAddress);
+        } else if (_eligibilityType == EligibilityType.Address) {
             eligibilityContract = new AddressEligibility(_eligibleAddresses);
-        } else if (_participant == VotingParticipant.Email) {
-            if (_eligibleEmails.length == 0) revert EligibleEmailsRequired();
-            bytes32[] memory votingIDs = new bytes32[](_eligibleEmails.length);
-            for (uint256 i = 0; i < _eligibleEmails.length; i++) {
-                votingIDs[i] = keccak256(abi.encodePacked(_eligibleEmails[i], block.timestamp));
-            }
-            eligibilityContract = new EmailEligibility(votingIDs);
+        } else if (_eligibilityType == EligibilityType.Email) {
+            eligibilityContract = new EmailEligibility(_votingIDs);
         } else {
-            revert UnsupportedParticipantType();
+            revert InvalidEligibilityType();
         }
 
-        // Create the appropriate voting contract
-        if (_resolution == VotingResolution.FPTP) {
-            proposalContract = new FPTPProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
-        } else if (_resolution == VotingResolution.RCV) {
-            proposalContract = new RCVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
-        } else if (_resolution == VotingResolution.STV) {
-            proposalContract = new STVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
-        } else if (_resolution == VotingResolution.QV) {
-            proposalContract = new QVProposal(address(eligibilityContract), _proposalLength, _proposalName, _proposalDescription);
+        address proposalContract;
+        
+        // Deploy the selected proposal type contract
+        if (_proposalType == ProposalType.FPTP) {
+            proposalContract = address(new FPTPProposal(
+                address(eligibilityContract),
+                _proposalLength,
+                _proposalName,
+                _proposalDescription,
+                _votingParticipant,
+                _candidateNames,
+                _candidateDescriptions,
+                _candidatePhotos
+            ));
+        } else if (_proposalType == ProposalType.RCV) {
+            proposalContract = address(new RCVProposal(
+                address(eligibilityContract),
+                _proposalLength,
+                _proposalName,
+                _proposalDescription,
+                _votingParticipant,
+                _candidateNames,
+                _candidateDescriptions,
+                _candidatePhotos
+            ));
+        } else if (_proposalType == ProposalType.STV) {
+            proposalContract = address(new STVProposal(
+                address(eligibilityContract),
+                _proposalLength,
+                _proposalName,
+                _proposalDescription,
+                _votingParticipant,
+                _candidateNames,
+                _candidateDescriptions,
+                _candidatePhotos
+            ));
+        } else if (_proposalType == ProposalType.QV) {
+            proposalContract = address(new QVProposal(
+                address(eligibilityContract),
+                _proposalLength,
+                _proposalName,
+                _proposalDescription,
+                _votingParticipant,
+                _candidateNames,
+                _candidateDescriptions,
+                _candidatePhotos
+            ));
         } else {
-            revert UnsupportedVotingResolution();
+            revert InvalidProposalType();
         }
 
-        ProposalInstance memory instance = ProposalInstance({
-            contractAddress: address(proposalContract),
-            resolution: _resolution,
-            participant: _participant
-        });
-
-        proposalInstances.push(instance);
-        emit ProposalCreated(address(proposalContract), _resolution, _participant);
-    }
-
-    function getProposalInstances() public view returns (ProposalInstance[] memory) {
-        return proposalInstances;
+        return proposalContract;
     }
 }

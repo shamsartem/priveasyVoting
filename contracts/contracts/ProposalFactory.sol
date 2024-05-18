@@ -65,13 +65,13 @@ contract ProposalFactory {
 
         // Create the appropriate voting contract
         if (_resolution == VotingResolution.FPTP) {
-            proposalContract = new FPTPVoting(address(eligibilityContract));
+            proposalContract = new FPTPProposal(address(eligibilityContract));
         } else if (_resolution == VotingResolution.RCV) {
-            proposalContract = new RCVElection(address(eligibilityContract));
+            proposalContract = new RCVProposal(address(eligibilityContract));
         } else if (_resolution == VotingResolution.STV) {
-            proposalContract = new STVElection(address(eligibilityContract));
+            proposalContract = new STVProposal(address(eligibilityContract));
         } else if (_resolution == VotingResolution.QV) {
-            proposalContract = new QVElection(address(eligibilityContract));
+            proposalContract = new QVProposal(address(eligibilityContract));
         } else {
             revert UnsupportedVotingResolution();
         }

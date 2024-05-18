@@ -1,6 +1,10 @@
-import { expect } from 'chai';
+import { expect } from "chai";
 import { Contract, Wallet } from "zksync-ethers";
-import { getWallet, deployContract, LOCAL_RICH_WALLETS } from '../../deploy/utils';
+import {
+  getWallet,
+  deployContract,
+  LOCAL_RICH_WALLETS,
+} from "../../deploy/utils";
 
 describe("MyNFT", function () {
   let nftContract: Contract;
@@ -14,7 +18,7 @@ describe("MyNFT", function () {
     nftContract = await deployContract(
       "MyNFT",
       ["MyNFTName", "MNFT", "https://mybaseuri.com/token/"],
-      { wallet: ownerWallet, silent: true }
+      { wallet: ownerWallet, silent: true },
     );
   });
 
@@ -42,7 +46,9 @@ describe("MyNFT", function () {
 
   it("Should not allow non-owner to mint NFTs", async function () {
     try {
-      const tx3 = await (nftContract.connect(recipientWallet) as Contract).mint(recipientWallet.address);
+      const tx3 = await (nftContract.connect(recipientWallet) as Contract).mint(
+        recipientWallet.address,
+      );
       await tx3.wait();
       expect.fail("Expected mint to revert, but it didn't");
     } catch (error) {

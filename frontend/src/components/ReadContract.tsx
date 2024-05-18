@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Contract } from 'zksync-ethers';
+import { useState, useEffect } from "react";
+import { Contract } from "zksync-ethers";
 
-import { useAsync } from '../hooks/useAsync';
-import { useEthereum } from './Context';
-import { daiContractConfig } from './contracts'
+import { useAsync } from "../hooks/useAsync";
+import { useEthereum } from "./Context";
+import { daiContractConfig } from "./contracts";
 
 export function ReadContract() {
   return (
@@ -16,7 +16,7 @@ export function ReadContract() {
         <TotalSupply />
       </div>
     </div>
-  )
+  );
 }
 
 function TotalSupply() {
@@ -30,7 +30,11 @@ function TotalSupply() {
     const provider = getProvider();
     if (!provider) throw new Error("Provider is not available");
 
-    const contract = new Contract(daiContractConfig.address, daiContractConfig.abi, provider);
+    const contract = new Contract(
+      daiContractConfig.address,
+      daiContractConfig.abi,
+      provider,
+    );
     return await contract.totalSupply();
   });
 
@@ -43,7 +47,7 @@ function TotalSupply() {
       <div>
         Total Supply: {supply?.toString()}
         <button onClick={fetchTotalSupply}>
-          {inProgress ? 'fetching...' : 'refetch'}
+          {inProgress ? "fetching..." : "refetch"}
         </button>
       </div>
       {error && <div>Error: {error.message}</div>}
@@ -61,9 +65,13 @@ function BalanceOf() {
     result: balance,
     execute: fetchBalance,
     inProgress,
-    error
+    error,
   } = useAsync(async () => {
-    const contract = new Contract(daiContractConfig.address, daiContractConfig.abi, getProvider()!);
+    const contract = new Contract(
+      daiContractConfig.address,
+      daiContractConfig.abi,
+      getProvider()!,
+    );
     return contract.balanceOf(address);
   });
 
@@ -73,9 +81,7 @@ function BalanceOf() {
 
   return (
     <div>
-      <div>
-        Token balance: {balance?.toString()}
-      </div>
+      <div>Token balance: {balance?.toString()}</div>
       <div>
         <input
           value={address!}
@@ -84,7 +90,7 @@ function BalanceOf() {
           placeholder="wallet address"
         />
         <button onClick={fetchBalance}>
-          {inProgress ? 'fetching...' : 'refetch'}
+          {inProgress ? "fetching..." : "refetch"}
         </button>
       </div>
       {error && <div>Error: {error.message}</div>}

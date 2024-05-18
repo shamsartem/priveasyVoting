@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useState } from 'react';
-import { ethers } from 'ethers';
+import { useState } from "react";
+import { ethers } from "ethers";
 
-import { useAsync } from '../hooks/useAsync';
-import { useEthereum } from './Context';
+import { useAsync } from "../hooks/useAsync";
+import { useEthereum } from "./Context";
 
 export function SendTransaction() {
   const [address, setAddress] = useState<string | null>(null);
@@ -12,7 +12,12 @@ export function SendTransaction() {
 
   const { getSigner, getProvider } = useEthereum();
 
-  const { result: transaction, execute: sendTransaction, inProgress, error } = useAsync(async () => {
+  const {
+    result: transaction,
+    execute: sendTransaction,
+    inProgress,
+    error,
+  } = useAsync(async () => {
     const result = await (await getSigner())!.sendTransaction({
       to: address!,
       value: ethers.parseEther(value!),
@@ -21,7 +26,12 @@ export function SendTransaction() {
     return result;
   });
 
-  const { result: receipt, execute: waitForReceipt, inProgress: receiptInProgress, error: receiptError } = useAsync(async (transactionHash: string) => {
+  const {
+    result: receipt,
+    execute: waitForReceipt,
+    inProgress: receiptInProgress,
+    error: receiptError,
+  } = useAsync(async (transactionHash: string) => {
     return await getProvider()!.waitForTransaction(transactionHash);
   });
 
@@ -33,8 +43,16 @@ export function SendTransaction() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input value={address || ''} onChange={e => setAddress(e.target.value)} placeholder="address" />
-        <input value={value || ''} onChange={e => setValue(e.target.value)} placeholder="value (ether)" />
+        <input
+          value={address || ""}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="address"
+        />
+        <input
+          value={value || ""}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="value (ether)"
+        />
         <button type="submit">Send</button>
       </form>
 
@@ -44,7 +62,11 @@ export function SendTransaction() {
           <div>Transaction Hash: {transaction.hash}</div>
           <div>
             Transaction Receipt:
-            {receiptInProgress ? <span>pending...</span> : <pre>{JSON.stringify(receipt, null, 2)}</pre>}
+            {receiptInProgress ? (
+              <span>pending...</span>
+            ) : (
+              <pre>{JSON.stringify(receipt, null, 2)}</pre>
+            )}
           </div>
         </div>
       )}

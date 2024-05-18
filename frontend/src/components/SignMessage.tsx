@@ -1,25 +1,30 @@
-'use client'
+"use client";
 
-import { useState, FormEvent } from 'react';
-import { ethers } from 'ethers';
+import { useState, FormEvent } from "react";
+import { ethers } from "ethers";
 
-import { useAsync } from '../hooks/useAsync';
-import { useEthereum } from './Context';
+import { useAsync } from "../hooks/useAsync";
+import { useEthereum } from "./Context";
 
 export function SignMessage() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const { getSigner } = useEthereum();
-  const { result, execute: signMessage, inProgress, error } = useAsync(async () => {
+  const {
+    result,
+    execute: signMessage,
+    inProgress,
+    error,
+  } = useAsync(async () => {
     const signer = await getSigner();
     if (signer && message) {
       const signature = await signer.signMessage(message);
       const recoveredAddress = ethers.verifyMessage(message, signature);
       return {
         signature,
-        recoveredAddress
+        recoveredAddress,
       };
     }
-    throw new Error('Signer not found or message is empty.');
+    throw new Error("Signer not found or message is empty.");
   });
 
   const handleSubmit = (event: FormEvent) => {

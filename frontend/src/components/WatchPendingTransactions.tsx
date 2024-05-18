@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useEthereum } from './Context';
+import { useEthereum } from "./Context";
 
 export function WatchPendingTransactions() {
   const { getProvider } = useEthereum();
@@ -14,7 +14,10 @@ export function WatchPendingTransactions() {
     const onBlock = async (blockNumber: number) => {
       const block = await provider?.getBlock(blockNumber);
       if (block && block.transactions) {
-        setTransactionHashes(prevHashes => [...prevHashes, ...block.transactions]);
+        setTransactionHashes((prevHashes) => [
+          ...prevHashes,
+          ...block.transactions,
+        ]);
       }
     };
 
@@ -33,8 +36,8 @@ export function WatchPendingTransactions() {
     <div>
       <details>
         <summary>{transactionHashes.length} transaction hashes</summary>
-        
-        <pre>{[...transactionHashes].reverse().join('\n')}</pre>
+
+        <pre>{[...transactionHashes].reverse().join("\n")}</pre>
       </details>
     </div>
   );

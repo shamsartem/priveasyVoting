@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
 
-import { useAsync } from '../hooks/useAsync';
-import { useEthereum } from './Context';
+import { useAsync } from "../hooks/useAsync";
+import { useEthereum } from "./Context";
 
 export function Balance() {
   return (
@@ -17,12 +17,16 @@ export function Balance() {
         <FindBalance />
       </div>
     </>
-  )
+  );
 }
 
 export function AccountBalance() {
   const { getProvider, account } = useEthereum();
-  const { result: balance, execute: fetchBalance, error } = useAsync(address => getProvider()!.getBalance(address));
+  const {
+    result: balance,
+    execute: fetchBalance,
+    error,
+  } = useAsync((address) => getProvider()!.getBalance(address));
 
   useEffect(() => {
     if (account?.address) {
@@ -43,29 +47,34 @@ export function AccountBalance() {
 }
 
 export function FindBalance() {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState("");
   const { getProvider } = useEthereum();
-  
+
   const fetchBalanceFunc = async (address: string) => {
     const provider = getProvider();
     if (!provider) throw new Error("Provider not found");
     return provider.getBalance(address);
   };
 
-  const { result: balance, execute: fetchBalance, inProgress, error } = useAsync(fetchBalanceFunc);
+  const {
+    result: balance,
+    execute: fetchBalance,
+    inProgress,
+    error,
+  } = useAsync(fetchBalanceFunc);
 
   return (
     <div>
       <div>
         Find balance:
-        <input 
-          value={address} 
-          onChange={(e) => setAddress(e.target.value)} 
-          type="text" 
+        <input
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          type="text"
           placeholder="wallet address"
         />
         <button onClick={() => fetchBalance(address)}>
-          {inProgress ? 'fetching...' : 'fetch'}
+          {inProgress ? "fetching..." : "fetch"}
         </button>
       </div>
       <div>{balance ? ethers.formatEther(balance) : ""}</div>

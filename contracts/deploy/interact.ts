@@ -4,7 +4,8 @@ import { ethers } from "ethers";
 
 // Address of the contract to interact with
 const CONTRACT_ADDRESS = "";
-if (!CONTRACT_ADDRESS) throw "⛔️ Provide address of the contract to interact with!";
+if (!CONTRACT_ADDRESS)
+  throw "⛔️ Provide address of the contract to interact with!";
 
 // An example of a script to interact with the contract
 export default async function () {
@@ -17,7 +18,7 @@ export default async function () {
   const contract = new ethers.Contract(
     CONTRACT_ADDRESS,
     contractArtifact.abi,
-    getWallet() // Interact with the contract on behalf of this wallet
+    getWallet(), // Interact with the contract on behalf of this wallet
   );
 
   // Run contract read function

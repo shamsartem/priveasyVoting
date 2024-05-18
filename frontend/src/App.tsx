@@ -1,24 +1,24 @@
-import { useEthereum } from './components/Context'
+import { useEthereum } from "./components/Context";
 
-import { Connect } from './components/Connect'
-import { Account } from './components/Account'
-import { NetworkSwitcher } from './components/NetworkSwitcher'
-import { Balance } from './components/Balance'
-import { BlockNumber } from './components/BlockNumber'
-import { ReadContract } from './components/ReadContract'
-import { SendTransaction } from './components/SendTransaction'
-import { SendTransactionPrepared } from './components/SendTransactionPrepared'
-import { SignMessage } from './components/SignMessage'
-import { SignTypedData } from './components/SignTypedData'
-import { Token } from './components/Token'
-import { WatchContractEvents } from './components/WatchContractEvents'
-import { WatchPendingTransactions } from './components/WatchPendingTransactions'
-import { WriteContract } from './components/WriteContract'
-import { WriteContractPrepared } from './components/WriteContractPrepared'
+import { Connect } from "./components/Connect";
+import { Account } from "./components/Account";
+import { NetworkSwitcher } from "./components/NetworkSwitcher";
+import { Balance } from "./components/Balance";
+import { BlockNumber } from "./components/BlockNumber";
+import { ReadContract } from "./components/ReadContract";
+import { SendTransaction } from "./components/SendTransaction";
+import { SendTransactionPrepared } from "./components/SendTransactionPrepared";
+import { SignMessage } from "./components/SignMessage";
+import { SignTypedData } from "./components/SignTypedData";
+import { Token } from "./components/Token";
+import { WatchContractEvents } from "./components/WatchContractEvents";
+import { WatchPendingTransactions } from "./components/WatchPendingTransactions";
+import { WriteContract } from "./components/WriteContract";
+import { WriteContractPrepared } from "./components/WriteContractPrepared";
 
 export function App() {
   const { account } = useEthereum();
-  
+
   return (
     <>
       <h1>zkSync + ethers + Vite</h1>
@@ -30,7 +30,10 @@ export function App() {
           <hr />
           <h2>Network</h2>
           <p>
-            <strong>Make sure to connect your wallet to zkSync Testnet for full functionality</strong>
+            <strong>
+              Make sure to connect your wallet to zkSync Testnet for full
+              functionality
+            </strong>
             <br />
             or update to a different contract address
           </p>
@@ -90,5 +93,5 @@ export function App() {
         </>
       )}
     </>
-  )
+  );
 }

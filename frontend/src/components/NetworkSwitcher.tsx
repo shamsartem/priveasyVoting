@@ -1,11 +1,15 @@
-'use client'
+"use client";
 
-import { useAsync } from '../hooks/useAsync';
-import { chains, useEthereum } from './Context';
+import { useAsync } from "../hooks/useAsync";
+import { chains, useEthereum } from "./Context";
 
 export function NetworkSwitcher() {
   const { switchNetwork: switchToChainByID, network } = useEthereum();
-  const { execute: switchNetwork, inProgress, error } = useAsync(switchToChainByID);
+  const {
+    execute: switchNetwork,
+    inProgress,
+    error,
+  } = useAsync(switchToChainByID);
 
   return (
     <div>
@@ -25,5 +29,5 @@ export function NetworkSwitcher() {
 
       {error && <div>Error: {error.message}</div>}
     </div>
-  )
+  );
 }

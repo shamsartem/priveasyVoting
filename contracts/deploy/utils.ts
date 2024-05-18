@@ -165,3 +165,53 @@ export const deployVotingContract = async (
 
   return contract;
 };
+
+export const deployProposalFactory = async (options?: DeployContractOptions) => {
+  const log = (message: string) => {
+    if (!options?.silent) console.log(message);
+  };
+
+  log('Starting deployment of ProposalFactory...');
+
+  const wallet = options?.wallet ?? getWallet();
+  const deployer = new Deployer(hre, wallet);
+  const contractArtifact = await deployer.loadArtifact('ProposalFactory').catch((error) => {
+    if (error?.message?.includes(`Artifact for contract "ProposalFactory" not found.`)) {
+      console.error(error.message);
+      throw `⛔️ Please make sure you have compiled your contracts or specified the correct contract name!`;
+    } else {
+      throw error;
+    }
+  });
+
+  // Estimate contract deployment fee
+  const deploymentFee = await deployer.estimateDeployFee(contractArtifact, []);
+  log(`Estimated deployment cost: ${ethers.formatEther(deploymentFee)} ETH`);
+
+  // Check if the wallet has enough balance
+  await verifyEnoughBalance(wallet, deploymentFee);
+
+  // Deploy the ProposalFactory contract
+  const contract = await deployer.deploy(contractArtifact, []);
+  const address = await contract.getAddress();
+  const constructorArgs = contract.interface.encodeDeploy([]);
+  const fullContractSource = `${contractArtifact.sourceName}:${contractArtifact.contractName}`;
+
+  // Display contract deployment info
+  log(`\n"${contractArtifact.contractName}" was successfully deployed:`);
+  log(` - Contract address: ${address}`);
+  log(` - Contract source: ${fullContractSource}`);
+  log(` - Encoded constructor arguments: ${constructorArgs}\n`);
+
+  if (!options?.noVerify && hre.network.config.verifyURL) {
+    log(`Requesting contract verification...`);
+    await verifyContract({
+      address,
+      contract: fullContractSource,
+      constructorArguments: constructorArgs,
+      bytecode: contractArtifact.bytecode,
+    });
+  }
+
+  return contract;
+};

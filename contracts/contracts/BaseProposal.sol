@@ -58,7 +58,7 @@ abstract contract BaseProposal {
 
     function vote(uint256 _candidateId, bytes32 _votingID) public virtual;
 
-    function vote(uint256[] calldata _candidateId, bytes32 _votingID) public virtual;
+    function voteMulti(uint256[] calldata _candidateId, bytes32 _votingID) public virtual;
 
     function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public virtual;
 

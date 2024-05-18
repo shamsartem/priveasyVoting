@@ -48,9 +48,9 @@ contract QVProposal is BaseProposal {
     function vote(uint256 _candidateId, bytes32 _votingID) public override {}
     
     // Placeholder function, QV requires allocating points to multiple _candidateIds
-    function vote(uint256[] calldata _candidateIds, bytes32 _votingID) public override {}
+    function voteMulti(uint256[] calldata _candidateIds, bytes32 _votingID) public override {}
 
-        function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
+    function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
         if (hasVoted[msg.sender]) {
             revert AlreadyVoted();
         }

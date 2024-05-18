@@ -45,7 +45,10 @@ contract RCVProposal is BaseProposal {
         return eligibilityContract.isEligible(_voter, _votingID);
     }
 
-    function vote(uint256[] calldata _candidateIds, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
+    // Placeholder function, RCV requires multiple _candidateIds
+    function vote(uint256 _candidateId, bytes32 _votingID) public override {}
+
+    function voteMulti(uint256[] calldata _candidateIds, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
         if (hasVoted[msg.sender]) {
             revert AlreadyVoted();
         }
@@ -63,9 +66,6 @@ contract RCVProposal is BaseProposal {
             EmailEligibility(address(eligibilityContract)).useVotingID(_votingID);
         }
     }
-
-    // Placeholder function, RCV requires multiple _candidateIds
-    function vote(uint256 _candidateId, bytes32 _votingID) public override {}
 
     // Placeholder function, RCV does not require _numVotes
     function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override {}

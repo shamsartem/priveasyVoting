@@ -1,13 +1,18 @@
-# Voting dApp
+# DAPPNAME
 
 ## Deployments
 
 ### zkSync Sepolia
-ProposalFactory: `0x065efaB1B2c49d1170ECF0d3F2B9327850904842`
+ProposalFactory: `0xEf8f786079C7c0F26d02E52A9081a9903D991ba6`
 
 ## Project Description
 
-Our Voting dApp is a decentralized application built on the zkSync blockchain that allows users to create and participate in various types of voting processes. Users can create proposals, vote using different mechanisms (such as First Past the Post, Ranked Choice Voting, Single Transferable Vote, and Quadratic Voting), and manage eligibility based on token holdings, NFT ownership, addresses, or email-based IDs.
+DAPPNAME is a private voting protocol designed to make creating proposals and voting on them as simple as possible for a wide range of users. With DAPPNAME, anyone can create a proposal and select between multiple options on the voting style as well as who is eligible to vote. Thanks to zkSync's Native Account Abstraction, anyone can vote - for free!
+
+### Problems Solving
+- **Public voting:** On public blockchains, voting data can be seen at any point. This reveals what individual addresses are voting for. Additionally, subsequent voters can see what prior users have voted for which can bias their decision.
+- **Restrictive voting styles:** Traditionally blockchain voting models have had to stick to simplistic systems such as First Past the Post due to computational overhead incurring excessive gas costs. On zkSync, the chain is scalable enough to facilitate more complex voting types such as Ranked Choice Voting (arguably a superior voting style for determining consensus).
+- **Only available for blockchain users:** In order to vote on a blockchain, users had to already have a blockchain wallet and funds to pay for the voting transaction. zkSync's native account abstraction is leveraged to allow social logins and a Gasmaster is deployed to fund their transactions. This massively lowers the barrier for entry, as users simply need an email to receive their unique voting code.
 
 ## Voting Resolution Styles
 
@@ -85,12 +90,7 @@ INFO
 INFO
 
 ## Problems Faced
-
-Smart Contract Compilation Errors: 
-    
-Deployment Issues: 
-
-Integration with Frontend: 
+- problems
 
 ## Tutorial
 
@@ -106,13 +106,14 @@ Integration with Frontend:
 
     Navigate to the "Proposals" page.
     Select the proposal you want to vote on.
-    Enter your voting ID (if required) and select your candidate(s) based on the voting mechanism.
+    Enter your voting ID (if required, for email voters only) and select your candidate(s) based on the voting mechanism.
     Click "Submit Vote".
 
 3. View Results
 
-    After the voting period ends, navigate to the proposal details page.
-    Click "Declare Winner" to finalize and view the results of the vote.
+    During the voting period, minimal information is displayed to retain the private voting structure.
+    
+    After the voting period ends, click "Declare Winner" to finalize and view the results of the vote.
 
 ## Setup Project Locally
 
@@ -163,3 +164,12 @@ Deploy the ProposalFactory contract:
     npm run dev
 
     Open your browser and navigate to http://localhost:3000.
+
+## Future Development Ideas
+- Privacy integration with zkSync's upcoming Validiums
+- Integration of L1 contracts to react to voting results
+- Allow for multiple types of voter eligibility in the same proposal
+- Additional voting styles like AV (Approval Voting) & CV (Cumulative Voting)
+- Integrate automated contract callers such as Gelato/Chainlink to call `getWinners` and finalize the proposal results
+- Add restrictions on GaslessPaymaster for deployed proposals
+- Add on-chain execution of logic from proposals

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import { useEthereum } from "./Context";
 
 export function Connect() {
@@ -8,9 +9,13 @@ export function Connect() {
   return (
     <div>
       {account.isConnected ? (
-        <button onClick={disconnect}>Disconnect wallet</button>
+        <Button variant="contained" onClick={disconnect} size="small">
+          Disconnect wallet
+        </Button>
       ) : (
-        <button onClick={connect}>Connect wallet</button>
+        <Button variant="contained" onClick={connect} size="small">
+          Connect wallet
+        </Button>
       )}
     </div>
   );

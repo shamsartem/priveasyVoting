@@ -1,226 +1,348 @@
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import type { Dayjs } from "dayjs";
 import { useState } from "react";
-
-const pollTypes = [
-  "First Past The Post",
-  "Ranked Choice",
-  "Single Transferable Vote",
-  "Quadratic Voting",
-] as const;
+import { RequireConnectedWallet } from "../components/RequireConnectedWallet.js";
+import { Contract } from "zksync-ethers";
+import { useAsync } from "../hooks/useAsync";
+import { contractConfig, proposalFactory } from "../contracts/contracts.js";
+import { useEthereum } from "../components/Context";
+import { TxInfo } from "../components/TxInfo.js";
+import { PageWrapper } from "../components/PageWrapper";
+import {
+  ProposalType,
+  EligibilityType,
+  pollTypeNames,
+  votingParticipantsNames,
+} from "../enums.js";
+import { ethers } from "ethers";
+import { zip } from "lodash";
+import LinkMaterial from "@mui/material/Link";
+import { Link } from "react-router-dom";
 
 type Candidate = {
   name: string;
   description: string;
+  photo: string;
 };
 
 export function Create() {
-  const [pollType, setPollType] = useState(pollTypes[0]);
-  const [votingParticipants, setVotingParticipants] = useState({
-    tokenHolders: true,
-    nftHolders: false,
-    address: false,
-    emails: false,
-    open: false,
-  });
-  const handleVotingParticipantsChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setVotingParticipants({
-      ...votingParticipants,
-      [event.target.name]: event.target.checked,
-    });
-  };
-  const { tokenHolders, nftHolders, address, emails, open } =
-    votingParticipants;
-
+  const [proposalName, setProposalName] = useState("");
+  const [proposalDescription, setProposalDescription] = useState("");
+  const [proposalType, setProposalType] = useState(ProposalType.FPTP);
+  const [eligibilityType, setEligibilityType] = useState(
+    EligibilityType.TokenHolders,
+  );
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [tokenAddress, setTokenAddress] = useState("");
+  const [addressesOrEmails, setAddressesOrEmails] = useState<string[]>([]);
+
+  const { getSigner, getProvider } = useEthereum();
+  const {
+    result: transaction,
+    execute: writeContract,
+    inProgress,
+    error,
+  } = useAsync(async () => {
+    const signer = await getSigner();
+    const contract = new Contract(
+      proposalFactory.address,
+      proposalFactory.abi,
+      signer,
+    );
+
+    const proposalLength = Math.round(
+      (Number(endDate?.toDate()) - Number(new Date())) / 1000,
+    );
+
+    const args = [
+      proposalType,
+      eligibilityType,
+      tokenAddress === "" ? ethers.ZeroAddress : tokenAddress,
+      proposalLength,
+      proposalName,
+      proposalDescription,
+      ...zip(
+        ...candidates.map((candidate) => [
+          candidate.name,
+          candidate.description,
+          candidate.photo,
+        ]),
+      ),
+      eligibilityType === EligibilityType.Address ? addressesOrEmails : [],
+      // TODO: create random shit here
+      eligibilityType === EligibilityType.Emails ? addressesOrEmails : [],
+    ];
+
+    console.log(JSON.stringify(args, null, 2));
+    const tx = await contract.createProposal(...args);
+    waitForReceipt(tx.hash);
+    return tx;
+  });
+
+  const {
+    result: receipt,
+    execute: waitForReceipt,
+    inProgress: receiptInProgress,
+    error: receiptError,
+  } = useAsync(async (transactionHash) => {
+    return await getProvider()!.waitForTransaction(transactionHash);
+  });
+
+  function handleSubmit() {
+    writeContract();
+  }
   return (
-    <div>
-      <Box
-        sx={(theme) => ({
-          width: "100%",
-          backgroundImage:
-            theme.palette.mode === "light"
-              ? "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)"
-              : "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)",
-          backgroundRepeat: "no-repeat",
-        })}
+    <PageWrapper>
+      <Typography
+        variant="h1"
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
+          fontSize: "clamp(3rem, 10vw, 3.5rem)",
+          ml: "auto",
+          mr: "auto",
+        }}
       >
-        <Container
+        Create&nbsp;new&nbsp;
+        <Typography
+          component="span"
+          variant="h1"
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            pt: { xs: 14, sm: 20 },
-            pb: { xs: 8, sm: 12 },
+            fontSize: "inherit",
+            color: (theme) =>
+              theme.palette.mode === "light" ? "primary.main" : "primary.light",
           }}
         >
-          <Stack
-            spacing={2}
-            alignItems="center"
-            useFlexGap
-            sx={{ width: { xs: "100%", sm: "70%" } }}
-          >
-            <Typography
-              variant="h1"
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                alignItems: "center",
-                fontSize: "clamp(3rem, 10vw, 3.5rem)",
+          poll
+        </Typography>
+      </Typography>
+      <RequireConnectedWallet>
+        <Stack
+          direction={{ xs: "column" }}
+          spacing={1}
+          useFlexGap
+          sx={{ pt: 2, width: "100%" }}
+        >
+          <TextField
+            label="Name"
+            value={proposalName}
+            onInput={(e) => {
+              // @ts-ignore
+              setProposalName(e.target.value);
+            }}
+          />
+          <TextField
+            label="Description"
+            value={proposalDescription}
+            onInput={(e) => {
+              // @ts-ignore
+              setProposalDescription(e.target.value);
+            }}
+            sx={{ mt: "10px" }}
+          />
+          <FormControl fullWidth sx={{ mt: "10px" }}>
+            <InputLabel id="poll-type-label">Poll type</InputLabel>
+            <Select
+              labelId="poll-type-label"
+              value={proposalType}
+              label="Poll type"
+              onChange={(e) => {
+                setProposalType(e.target.value as typeof proposalType);
               }}
             >
-              Create&nbsp;new&nbsp;
-              <Typography
-                component="span"
-                variant="h1"
-                sx={{
-                  fontSize: "inherit",
-                  color: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "primary.main"
-                      : "primary.light",
-                }}
-              >
-                poll
-              </Typography>
-            </Typography>
-            <Typography
-              textAlign="center"
-              color="text.secondary"
-              sx={{ width: { sm: "100%", md: "80%" } }}
-            >
-              Select a poll type
-            </Typography>
-            <Stack
-              direction={{ xs: "column" }}
-              spacing={1}
-              useFlexGap
-              sx={{ pt: 2, width: { xs: "100%" } }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Poll type</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={pollType}
-                  label="Age"
-                  onChange={(e) => {
-                    setPollType(e.target.value as typeof pollType);
-                  }}
-                >
-                  {pollTypes.map((pollType) => (
+              {Object.values(ProposalType)
+                .filter((v): v is ProposalType => !isNaN(Number(v)))
+                .map((pollType) => {
+                  return (
                     <MenuItem key={pollType} value={pollType}>
-                      {pollType}
+                      {pollTypeNames[pollType]}
                     </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Stack>
-          </Stack>
-          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-            <FormLabel component="legend">Select Voting Participants</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={tokenHolders}
-                    onChange={handleVotingParticipantsChange}
-                    name="tokenHolders"
-                  />
-                }
-                label="Token Holders"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={nftHolders}
-                    onChange={handleVotingParticipantsChange}
-                    name="nftHolders"
-                  />
-                }
-                label="NFT Holders"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={address}
-                    onChange={handleVotingParticipantsChange}
-                    name="address"
-                  />
-                }
-                label="Address"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={emails}
-                    onChange={handleVotingParticipantsChange}
-                    name="emails"
-                  />
-                }
-                label="Emails"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={open}
-                    onChange={handleVotingParticipantsChange}
-                    name="open"
-                  />
-                }
-                label="Open"
-              />
-            </FormGroup>
+                  );
+                })}
+            </Select>
           </FormControl>
+          <FormControl fullWidth sx={{ mt: "10px" }}>
+            <InputLabel id="voting-participants-label">
+              Voting Participants
+            </InputLabel>
+            <Select
+              labelId="voting-participants-label"
+              value={eligibilityType}
+              label="Voting Participants"
+              onChange={(e) => {
+                setEligibilityType(e.target.value as EligibilityType);
+              }}
+            >
+              {Object.values(EligibilityType)
+                .filter((v): v is EligibilityType => !isNaN(Number(v)))
+                .map((votingParticipant) => {
+                  return (
+                    <MenuItem key={votingParticipant} value={votingParticipant}>
+                      {votingParticipantsNames[votingParticipant]}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </FormControl>
+          {(eligibilityType === EligibilityType.TokenHolders ||
+            eligibilityType === EligibilityType.NFTHolders) && (
+            <TextField
+              label="Token Address"
+              value={tokenAddress}
+              onInput={(e) => {
+                // @ts-ignore
+                setTokenAddress(e.target.value);
+              }}
+              sx={{ mt: "10px" }}
+            />
+          )}
+          {(eligibilityType === EligibilityType.Address ||
+            eligibilityType === EligibilityType.Emails) && (
+            <>
+              {addressesOrEmails.map((addressOrId, index) => (
+                <Box key={index} sx={{ mt: "10px", display: "flex" }}>
+                  <TextField
+                    key={index}
+                    label={`${eligibilityType === EligibilityType.Address ? "Address" : "Email"} ${index + 1}`}
+                    value={addressOrId}
+                    onInput={(e) => {
+                      const newAddressesOrEmails = [...addressesOrEmails];
+                      // @ts-ignore
+                      newAddressesOrEmails[index] = e.target.value;
+                      setAddressesOrEmails(newAddressesOrEmails);
+                    }}
+                  />
+                  <Button
+                    sx={{ ml: "10px" }}
+                    variant="outlined"
+                    startIcon={<Delete />}
+                    onClick={() => {
+                      const newAddressesOrEmails = [...addressesOrEmails];
+                      newAddressesOrEmails.splice(index, 1);
+                      setAddressesOrEmails(newAddressesOrEmails);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Box>
+              ))}
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  const newAddressesOrEmails = [...addressesOrEmails];
+                  newAddressesOrEmails.push("");
+                  setAddressesOrEmails(newAddressesOrEmails);
+                }}
+                sx={{ mt: "10px" }}
+              >
+                Add{" "}
+                {eligibilityType === EligibilityType.Address
+                  ? "Address"
+                  : "Email"}
+              </Button>
+            </>
+          )}
+          <DateTimePicker
+            value={endDate}
+            sx={{ mt: "10px" }}
+            onChange={(newValue) => {
+              setEndDate(newValue);
+            }}
+            label="Poll end time"
+            disablePast
+          />
+        </Stack>
+        <Stack
+          spacing={2}
+          alignItems="center"
+          useFlexGap
+          sx={{
+            border: "1px solid lightgray",
+            borderRadius: "10px",
+            p: "30px",
+            mb: "20px",
+            width: "100%",
+          }}
+        >
           {candidates.map((candidate, index) => (
             <Candidate
               key={index}
               nameValue={candidate.name}
               onNameInput={(event) => {
                 const newCandidates = [...candidates];
+                // @ts-ignore
                 newCandidates[index].name = event.target.value;
                 setCandidates(newCandidates);
               }}
               descriptionValue={candidate.description}
               onDescriptionInput={(event) => {
                 const newCandidates = [...candidates];
+                // @ts-ignore
                 newCandidates[index].description = event.target.value;
+                setCandidates(newCandidates);
+              }}
+              delete={() => {
+                const newCandidates = [...candidates];
+                newCandidates.splice(index, 1);
+                console.log(newCandidates);
                 setCandidates(newCandidates);
               }}
             />
           ))}
           <Button
             variant="contained"
-            sx={{ mb: "10px" }}
             color="primary"
             onClick={() =>
-              setCandidates([...candidates, { name: "", description: "" }])
+              setCandidates([
+                ...candidates,
+                {
+                  name: "",
+                  description: "",
+                  photo:
+                    "ipfs://QmZfCpgKQq1kMwzHD1R2SFVNtJLSrATFnbu8EvXmVcWD5E/27138ad7-5088-4c61-8043-239ede78977d.webp",
+                },
+              ])
             }
           >
             Add Candidate
           </Button>
-          <Button variant="contained" color="primary">
-            Create
-          </Button>
-        </Container>
-      </Box>
-    </div>
+        </Stack>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Create
+        </Button>
+        {receipt && (
+          <>
+            <Typography variant="h2">Success</Typography>
+            Voters can vote by following this link:{" "}
+            <LinkMaterial
+              sx={{ mr: "10px" }}
+              component={Link}
+              to={`/vote/${receipt.contractAddress}`}
+            >
+              {receipt.contractAddress}
+            </LinkMaterial>
+          </>
+        )}
+        <TxInfo
+          inProgress={inProgress}
+          transaction={transaction}
+          receiptInProgress={receiptInProgress}
+          receipt={receipt}
+          error={error}
+          receiptError={receiptError}
+        />
+      </RequireConnectedWallet>
+    </PageWrapper>
   );
 }
 
@@ -229,24 +351,35 @@ function Candidate(props: {
   onNameInput: (event: React.FormEvent<HTMLInputElement>) => void;
   descriptionValue: string;
   onDescriptionInput: (event: React.FormEvent<HTMLInputElement>) => void;
+  delete: () => void;
 }) {
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
-        mb: "20px",
+        flexDirection: { xs: "column", sm: "row" },
+        mb: "10px",
+        width: "100%",
+        gap: "10px",
+        pl: 0,
+        pr: 0,
       }}
     >
       <TextField
         label="Name"
         value={props.nameValue}
         onInput={props.onNameInput}
+        sx={{ flex: 1 }}
       />
       <TextField
         label="Description"
+        sx={{ flex: 1 }}
         value={props.descriptionValue}
         onInput={props.onDescriptionInput}
       />
-    </Container>
+      <Button variant="outlined" startIcon={<Delete />} onClick={props.delete}>
+        Delete
+      </Button>
+    </Box>
   );
 }

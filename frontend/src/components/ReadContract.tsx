@@ -5,7 +5,7 @@ import { Contract } from "zksync-ethers";
 
 import { useAsync } from "../hooks/useAsync";
 import { useEthereum } from "./Context";
-import { daiContractConfig } from "./contracts";
+import { contractConfig } from "../contracts/contracts";
 
 export function ReadContract() {
   return (
@@ -31,8 +31,8 @@ function TotalSupply() {
     if (!provider) throw new Error("Provider is not available");
 
     const contract = new Contract(
-      daiContractConfig.address,
-      daiContractConfig.abi,
+      contractConfig.address,
+      contractConfig.abi,
       provider,
     );
     return await contract.totalSupply();
@@ -68,8 +68,8 @@ function BalanceOf() {
     error,
   } = useAsync(async () => {
     const contract = new Contract(
-      daiContractConfig.address,
-      daiContractConfig.abi,
+      contractConfig.address,
+      contractConfig.abi,
       getProvider()!,
     );
     return contract.balanceOf(address);

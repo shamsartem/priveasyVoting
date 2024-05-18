@@ -1,3 +1,4 @@
+import { alpha } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -16,8 +17,9 @@ export default function Hero() {
         width: "100%",
         backgroundImage:
           theme.palette.mode === "light"
-            ? "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)"
-            : "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)",
+            ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+        backgroundSize: "100% 20%",
         backgroundRepeat: "no-repeat",
       })}
     >
@@ -45,7 +47,7 @@ export default function Hero() {
               fontSize: "clamp(3rem, 10vw, 3.5rem)",
             }}
           >
-            Our&nbsp;latest&nbsp;
+            Voting&nbsp;with&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -57,7 +59,7 @@ export default function Hero() {
                     : "primary.light",
               }}
             >
-              products
+              zkSync
             </Typography>
           </Typography>
           <Typography
@@ -69,31 +71,6 @@ export default function Hero() {
             solutions tailored to your needs. Elevate your experience with
             top-tier features and services.
           </Typography>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: "100%", sm: "auto" } }}
-          >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              inputProps={{
-                autoComplete: "off",
-                "aria-label": "Enter your email address",
-              }}
-            />
-            <Button variant="contained" color="primary">
-              Start now
-            </Button>
-          </Stack>
         </Stack>
       </Container>
     </Box>

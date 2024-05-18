@@ -1,5 +1,4 @@
-import * as React from "react";
-import { PaletteMode } from "@mui/material";
+import { PaletteMode, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import LinkMaterial from "@mui/material/Link";
@@ -7,14 +6,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import ToggleColorMode from "./ToggleColorMode";
 
 import { Link } from "react-router-dom";
+import { Connect } from "./Connect";
+import { useEthereum } from "./Context.js";
+import { useState } from "react";
 
 interface AppAppBarProps {
   mode: PaletteMode;
@@ -22,7 +21,8 @@ interface AppAppBarProps {
 }
 
 export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const { account } = useEthereum();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -95,7 +95,11 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               alignItems: "center",
             }}
           >
-            <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+            <Typography variant="body1" color="gray" sx={{ mr: "10px" }}>
+              {account.isConnected ? account.address : ""}
+            </Typography>
+            {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
+            <Connect />
           </Box>
           <Box sx={{ display: { sm: "flex", md: "none" } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -108,7 +112,7 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   backgroundColor: "background.default",
                 }}
               >
-                <Box
+                {/* <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -122,8 +126,8 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon />
                   </IconButton>
-                </Box>
-                <Divider sx={{ my: 3 }} />
+                </Box> */}
+                {/* <Divider sx={{ my: 3 }} /> */}
                 <MenuItem>
                   <LinkMaterial
                     sx={{ width: "100%" }}
@@ -163,6 +167,9 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   >
                     Results
                   </LinkMaterial>
+                </MenuItem>
+                <MenuItem>
+                  <Connect />
                 </MenuItem>
               </Box>
             </Drawer>

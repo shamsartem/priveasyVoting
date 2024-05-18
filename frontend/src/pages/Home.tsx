@@ -1,18 +1,18 @@
-import { Connect } from "../components/Connect";
-import { Account } from "../components/Account";
-import { NetworkSwitcher } from "../components/NetworkSwitcher";
-import { Balance } from "../components/Balance";
-import { BlockNumber } from "../components/BlockNumber";
-import { ReadContract } from "../components/ReadContract";
-import { SendTransaction } from "../components/SendTransaction";
-import { SendTransactionPrepared } from "../components/SendTransactionPrepared";
-import { SignMessage } from "../components/SignMessage";
-import { SignTypedData } from "../components/SignTypedData";
-import { Token } from "../components/Token";
-import { WatchContractEvents } from "../components/WatchContractEvents";
-import { WatchPendingTransactions } from "../components/WatchPendingTransactions";
-import { WriteContract } from "../components/WriteContract";
-import { WriteContractPrepared } from "../components/WriteContractPrepared";
+// import { Connect } from "../components/Connect";
+// import { Account } from "../components/Account";
+// import { NetworkSwitcher } from "../components/NetworkSwitcher";
+// import { Balance } from "../components/Balance";
+// import { BlockNumber } from "../components/BlockNumber";
+// import { ReadContract } from "../components/ReadContract";
+// import { SendTransaction } from "../components/SendTransaction";
+// import { SendTransactionPrepared } from "../components/SendTransactionPrepared";
+// import { SignMessage } from "../components/SignMessage";
+// import { SignTypedData } from "../components/SignTypedData";
+// import { Token } from "../components/Token";
+// import { WatchContractEvents } from "../components/WatchContractEvents";
+// import { WatchPendingTransactions } from "../components/WatchPendingTransactions";
+// import { WriteContract } from "../components/WriteContract";
+// import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import { useEthereum } from "../components/Context";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -30,7 +30,7 @@ export function Home() {
         <Divider />
         <FAQ />
       </Box>
-      <h2>Home</h2>
+      {/* <h2>Home</h2>
       <>
         <h1>zkSync + ethers + Vite</h1>
 
@@ -103,7 +103,7 @@ export function Home() {
             <WriteContractPrepared />
           </>
         )}
-      </>
+      </> */}
     </div>
   );
 }

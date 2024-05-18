@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Contract } from "zksync-ethers";
 
-import { daiContractConfig } from "./contracts";
+import { contractConfig } from "../contracts/contracts";
 import { useEthereum } from "./Context";
 
 type TransferLog = {
@@ -21,8 +21,8 @@ export function WatchContractEvents() {
     if (!provider) return;
 
     const contract = new Contract(
-      daiContractConfig.address,
-      daiContractConfig.abi,
+      contractConfig.address,
+      contractConfig.abi,
       provider,
     );
     const handleTransfer = (from: string, to: string, amount: BigInt) => {

@@ -4,9 +4,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Create } from "./pages/Create";
-import { Vote } from "./pages/Vote";
-import { Results } from "./pages/Results";
+import { VoteSelect } from "./pages/VoteSelect";
+import { ResultsSelect } from "./pages/ResultsSelect";
 import LayoutComponent from "./Layout.js";
+import { Vote } from "./pages/Vote.js";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +24,15 @@ const router = createBrowserRouter([
       },
       {
         path: "vote",
+        element: <VoteSelect />,
+      },
+      {
+        path: "vote/:id",
         element: <Vote />,
       },
       {
         path: "results",
-        element: <Results />,
+        element: <ResultsSelect />,
       },
       {
         path: "*",

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Contract } from "zksync-ethers";
 
 import { useAsync } from "../hooks/useAsync";
-import { daiContractConfig } from "./contracts";
+import { contractConfig } from "../contracts/contracts";
 import { useEthereum } from "./Context";
 
 export function WriteContract() {
@@ -17,8 +17,8 @@ export function WriteContract() {
     error,
   } = useAsync(async () => {
     const contract = new Contract(
-      daiContractConfig.address,
-      daiContractConfig.abi,
+      contractConfig.address,
+      contractConfig.abi,
       await getSigner(),
     );
 

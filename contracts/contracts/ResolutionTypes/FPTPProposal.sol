@@ -54,7 +54,11 @@ contract FPTPProposal is BaseProposal {
         }
     }
 
+    // Placeholder function, FPTP requires single _candidateId
     function vote(uint256[] calldata _candidateId, bytes32 _votingID) public override {}
+
+    // Placeholder function, FPTP does not require _numVotes
+    function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override {}
 
     function declareWinner() public override {
         uint256 winningCandidateId = 0;

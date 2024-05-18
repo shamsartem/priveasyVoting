@@ -60,6 +60,8 @@ abstract contract BaseProposal {
 
     function vote(uint256[] calldata _candidateId, bytes32 _votingID) public virtual;
 
+    function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public virtual;
+
     function getCandidate(uint256 _candidateId) public view returns (string memory, string memory, string memory, uint256) {
         Candidate memory candidate = candidates[_candidateId];
         return (candidate.name, candidate.description, candidate.photo, candidate.votes);

@@ -10,6 +10,12 @@ contract QVProposal is BaseProposal {
     IEligibility public eligibilityContract;
 
     error AlreadyVoted();
+    error InsufficientCredits();
+
+    mapping(address => uint256) public voterCredits;
+    mapping(uint256 => uint256) public candidateVoteCounts;
+
+    uint256 public constant INITIAL_CREDITS = 100; // Each voter gets 100 voting credits
 
     constructor(
         address _eligibilityContract,
@@ -38,7 +44,13 @@ contract QVProposal is BaseProposal {
         return eligibilityContract.isEligible(_voter, _votingID);
     }
 
-    function vote(uint256 _candidateId, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
+    // Placeholder function, QV requires allocating points to multiple _candidateIds
+    function vote(uint256 _candidateId, bytes32 _votingID) public override {}
+    
+    // Placeholder function, QV requires allocating points to multiple _candidateIds
+    function vote(uint256[] calldata _candidateIds, bytes32 _votingID) public override {}
+
+        function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
         if (hasVoted[msg.sender]) {
             revert AlreadyVoted();
         }
@@ -46,7 +58,14 @@ contract QVProposal is BaseProposal {
             revert Types.InvalidCandidate();
         }
 
-        // TODO: Implement QV voting logic
+        uint256 cost = _numVotes * _numVotes; // Quadratic cost
+        if (voterCredits[msg.sender] < cost) {
+            revert InsufficientCredits();
+        }
+
+        voterCredits[msg.sender] -= cost;
+        candidateVoteCounts[_candidateId] += _numVotes;
+        candidates[_candidateId].votes += _numVotes; // Accumulate votes for the candidate
 
         hasVoted[msg.sender] = true;
 
@@ -55,9 +74,20 @@ contract QVProposal is BaseProposal {
         }
     }
 
-    function vote(uint256[] calldata _candidateId, bytes32 _votingID) public override {}
-
     function declareWinner() public override {
-        // TODO: Implement QV winner declaration logic
+        require(hasVotingEnded(), "Voting period has not ended yet");
+
+        uint256 winningCandidateId = 0;
+        uint256 winningVotes = 0;
+
+        for (uint256 i = 0; i < candidateCount; i++) {
+            if (candidateVoteCounts[i] > winningVotes) {
+                winningCandidateId = i;
+                winningVotes = candidateVoteCounts[i];
+            }
+        }
+
+        winnerCandidateId = winningCandidateId;
+        winnerDeclared = true;
     }
 }

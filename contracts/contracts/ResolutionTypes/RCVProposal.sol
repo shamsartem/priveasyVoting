@@ -64,7 +64,11 @@ contract RCVProposal is BaseProposal {
         }
     }
 
+    // Placeholder function, RCV requires multiple _candidateIds
     function vote(uint256 _candidateId, bytes32 _votingID) public override {}
+
+    // Placeholder function, RCV does not require _numVotes
+    function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override {}
 
     function getBallot(address _voter) public view returns (uint256[] memory) {
         return ballots[_voter].preferences;

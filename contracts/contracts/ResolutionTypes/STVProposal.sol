@@ -70,6 +70,9 @@ contract STVProposal is BaseProposal {
     // Placeholder function, STV requires multiple _candidateIds
     function vote(uint256 _candidateId, bytes32 _votingID) public override {}
 
+    // Placeholder function, STV does not require _numVotes
+    function voteQuadratic(uint256 _candidateId, uint256 _numVotes, bytes32 _votingID) public override {}
+
     function calculateQuota() internal view returns (uint256) {
         // Example quota calculation using Droop quota: (Total Votes / (Seats + 1)) + 1
         // For simplicity, assuming 1 seat. Adjust accordingly for multiple seats.

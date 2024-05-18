@@ -15,6 +15,8 @@ import "./Types.sol";
 contract ProposalFactory {
     using Types for *;
 
+    event ProposalDeployed(address proposalAddress);
+
     function createProposal(
         Types.ProposalType _proposalType,
         Types.EligibilityType _eligibilityType,
@@ -94,6 +96,7 @@ contract ProposalFactory {
             revert Types.InvalidProposalType();
         }
 
+        emit ProposalDeployed(proposalContract);
         return proposalContract;
     }
 }

@@ -4,7 +4,7 @@
   "pipeline": {
     "compile": {
       "dependsOn": ["^compile"],
-      "outputs": ["artifacts-zk/**"]
+      "outputs": ["artifacts-zk/**", "cache-zk/**"]
     },
     "build": {
       "dependsOn": ["^build"],

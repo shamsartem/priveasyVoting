@@ -8,6 +8,7 @@ import "./ResolutionTypes/QVProposal.sol";
 import "./ParticipantTypes/TokenHoldersEligibility.sol";
 import "./ParticipantTypes/NFTHoldersEligibility.sol";
 import "./ParticipantTypes/AddressEligibility.sol";
+import "./ParticipantTypes/EmailEligibility.sol";
 
 contract ProposalFactory {
     enum VotingResolution { FPTP, RCV, STV, QV }
@@ -26,6 +27,7 @@ contract ProposalFactory {
     error TokenAddressRequired();
     error NFTAddressRequired();
     error EligibleAddressesRequired();
+    error EligibleEmailsRequired();
     error UnsupportedParticipantType();
     error UnsupportedVotingResolution();
 
@@ -34,7 +36,8 @@ contract ProposalFactory {
         VotingParticipant _participant,
         address _tokenAddress,
         address _nftAddress,
-        address[] memory _eligibleAddresses
+        address[] memory _eligibleAddresses,
+        string[] memory _eligibleEmails
     ) public {
         BaseProposal proposalContract;
         IEligibility eligibilityContract;
@@ -49,6 +52,13 @@ contract ProposalFactory {
         } else if (_participant == VotingParticipant.Address) {
             if (_eligibleAddresses.length == 0) revert EligibleAddressesRequired();
             eligibilityContract = new AddressEligibility(_eligibleAddresses);
+        } else if (_participant == VotingParticipant.Email) {
+            if (_eligibleEmails.length == 0) revert EligibleEmailsRequired();
+            bytes32[] memory votingIDs = new bytes32[](_eligibleEmails.length);
+            for (uint256 i = 0; i < _eligibleEmails.length; i++) {
+                votingIDs[i] = keccak256(abi.encodePacked(_eligibleEmails[i], block.timestamp));
+            }
+            eligibilityContract = new EmailEligibility(votingIDs);
         } else {
             revert UnsupportedParticipantType();
         }

@@ -37,7 +37,7 @@ abstract contract BaseProposal {
 
     function isEligible(address _voter) public view virtual returns (bool);
 
-    function vote(uint256 _candidateId) public virtual;
+    function vote(uint256 _candidateId, bytes32 _votingID) public virtual {};
 
     function getCandidate(uint256 _candidateId) public view returns (string memory, string memory, uint256) {
         Candidate memory candidate = candidates[_candidateId];

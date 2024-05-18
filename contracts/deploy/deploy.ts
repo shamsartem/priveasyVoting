@@ -1,10 +1,10 @@
-import { deployContract } from "./utils";
+import { deployVotingContract } from "./utils";
 
-// An example of a basic deploy script
-// It will deploy a Greeter contract to selected network
-// as well as verify it on Block Explorer if possible for the network
+// An example of a basic deploy script for voting contracts
 export default async function () {
-  const contractArtifactName = "Greeter";
-  const constructorArguments = ["Hi there!"];
-  await deployContract(contractArtifactName, constructorArguments);
+  const contractType = "FPTPProposal"; // You can change this to "RCVProposal" or other types
+  const eligibilityType = "TokenHoldersEligibility"; // Change this as needed
+  const constructorArguments = ["0xYourTokenAddressHere", 604800]; // Example arguments: Token address and proposal length (in seconds)
+  
+  await deployVotingContract(contractType, eligibilityType, constructorArguments);
 }

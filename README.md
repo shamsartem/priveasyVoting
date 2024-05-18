@@ -159,6 +159,14 @@ Deploy the ProposalFactory contract:
 
     npx hardhat run --network zkSyncSepoliaTestnet deploy/deployFactory.ts
 
+Deploy the GeneralPaymaster contract:
+
+    npx hardhat run --network zkSyncSepoliaTestnet deploy/deployPaymaster.ts
+
+Fund the GeneralPaymaster contract:
+
+    Transfer ETH to the deployed GeneralPaymaster contract    
+
 #### Running the Frontend
 
     cd frontend
@@ -174,3 +182,6 @@ Deploy the ProposalFactory contract:
 - Integrate automated contract callers such as Gelato/Chainlink to call `getWinners` and finalize the proposal results
 - Add restrictions on GaslessPaymaster for deployed proposals
 - Add on-chain execution of logic from proposals
+
+
+Made with ❤️ at ZK Hack Krakow 2024

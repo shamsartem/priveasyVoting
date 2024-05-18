@@ -6,8 +6,8 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { PageWrapper } from "../components/PageWrapper.js";
 import { RequireConnectedWallet } from "../components/RequireConnectedWallet.js";
-import { useNavigate, useParams } from "react-router-dom";
-import { EligibilityType, ProposalType, pollTypeNames } from "../enums.js";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { EligibilityType, ProposalType, proposalTypeNames } from "../enums.js";
 import {
   FormControl,
   FormControlLabel,
@@ -28,6 +28,7 @@ import { baseProposalAbi } from "../contracts/contracts";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { times } from "lodash";
 import { ethers } from "ethers";
+import LinkMaterial from "@mui/material/Link";
 
 type CandidateWithVotes = {
   name: string;
@@ -130,7 +131,7 @@ export function Vote() {
       >
         Vote
       </Typography>
-      <RequireConnectedWallet>
+      <RequireConnectedWallet isVoter>
         {proposal && id && (
           <>
             <Typography variant="h2">{proposal.proposalName}</Typography>
@@ -158,16 +159,19 @@ export function Vote() {
             You are not eligible to vote
           </Typography>
         )}
-        {proposal === false && (
-          <Typography
-            sx={{
-              ml: "auto",
-              mr: "auto",
-            }}
-            variant="h3"
-          >
-            You have already voted
-          </Typography>
+        {proposal === false && id !== undefined && (
+          <>
+            <Typography
+              sx={{
+                ml: "auto",
+                mr: "auto",
+              }}
+              variant="h3"
+            >
+              You have already voted
+            </Typography>
+            <Results address={id} />
+          </>
         )}
         {inProgress && <div>Loading proposal...</div>}
         {error && <div>Error: {error?.message}</div>}
@@ -253,6 +257,7 @@ function FirstPastThePost(props: { proposal: Proposal; id: string }) {
       >
         Vote
       </Button>
+      {receipt && <Results address={props.id} />}
       <TxInfo
         inProgress={inProgress}
         transaction={transaction}
@@ -261,6 +266,22 @@ function FirstPastThePost(props: { proposal: Proposal; id: string }) {
         error={error}
         receiptError={receiptError}
       />
+    </>
+  );
+}
+
+function Results(props: { address: string }) {
+  return (
+    <>
+      <Typography variant="h2">Success</Typography>
+      To see the results visit this link:{" "}
+      <LinkMaterial
+        sx={{ mr: "10px" }}
+        component={Link}
+        to={`/results/${props.address}`}
+      >
+        {props.address}
+      </LinkMaterial>
     </>
   );
 }

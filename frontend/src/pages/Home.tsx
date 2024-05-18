@@ -21,15 +21,15 @@ import Highlights from "../components/Highlights";
 import FAQ from "../components/FAQ";
 
 export function Home() {
-  const { account } = useEthereum();
+  // const { account } = useEthereum();
   return (
     <div>
       <Hero />
-      <Box sx={{ bgcolor: "background.default" }}>
+      {/* <Box sx={{ bgcolor: "background.default" }}>
         <Highlights />
         <Divider />
         <FAQ />
-      </Box>
+      </Box> */}
       {/* <h2>Home</h2>
       <>
         <h1>zkSync + ethers + Vite</h1>

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const mockPolls = [
+const mockProposals = [
   {
     name: "First Past The Post",
     description: "Vote in the first place",
@@ -68,11 +68,11 @@ export function VoteSelect() {
           Visit voting page
         </Button>
       </Box>
-      <RequireConnectedWallet>
+      <RequireConnectedWallet isVoter>
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
-          {mockPolls.map(({ description, name, id }, i) => {
+          {mockProposals.map(({ description, name, id }, i) => {
             return (
               <>
                 <ListItemButton
@@ -101,7 +101,7 @@ export function VoteSelect() {
                     }
                   />
                 </ListItemButton>
-                {i !== mockPolls.length - 1 && (
+                {i !== mockProposals.length - 1 && (
                   <Divider
                     key={`divider_${i}`}
                     variant="inset"

@@ -62,7 +62,7 @@ export default function Hero() {
               zkSync
             </Typography>
           </Typography>
-          <Typography
+          {/* <Typography
             textAlign="center"
             color="text.secondary"
             sx={{ width: { sm: "100%", md: "80%" } }}
@@ -70,7 +70,7 @@ export default function Hero() {
             Explore our cutting-edge dashboard, delivering high-quality
             solutions tailored to your needs. Elevate your experience with
             top-tier features and services.
-          </Typography>
+          </Typography> */}
         </Stack>
       </Container>
     </Box>

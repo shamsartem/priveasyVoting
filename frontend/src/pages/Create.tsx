@@ -19,7 +19,7 @@ import { PageWrapper } from "../components/PageWrapper";
 import {
   ProposalType,
   EligibilityType,
-  pollTypeNames,
+  proposalTypeNames,
   votingParticipantsNames,
 } from "../enums.js";
 import { ethers } from "ethers";
@@ -123,7 +123,7 @@ export function Create() {
               theme.palette.mode === "light" ? "primary.main" : "primary.light",
           }}
         >
-          poll
+          proposal
         </Typography>
       </Typography>
       <RequireConnectedWallet>
@@ -151,21 +151,21 @@ export function Create() {
             sx={{ mt: "10px" }}
           />
           <FormControl fullWidth sx={{ mt: "10px" }}>
-            <InputLabel id="poll-type-label">Poll type</InputLabel>
+            <InputLabel id="proposal-type-label">Proposal type</InputLabel>
             <Select
-              labelId="poll-type-label"
+              labelId="proposal-type-label"
               value={proposalType}
-              label="Poll type"
+              label="Proposal type"
               onChange={(e) => {
                 setProposalType(e.target.value as typeof proposalType);
               }}
             >
               {Object.values(ProposalType)
                 .filter((v): v is ProposalType => !isNaN(Number(v)))
-                .map((pollType) => {
+                .map((proposalType) => {
                   return (
-                    <MenuItem key={pollType} value={pollType}>
-                      {pollTypeNames[pollType]}
+                    <MenuItem key={proposalType} value={proposalType}>
+                      {proposalTypeNames[proposalType]}
                     </MenuItem>
                   );
                 })}
@@ -258,7 +258,7 @@ export function Create() {
             onChange={(newValue) => {
               setEndDate(newValue);
             }}
-            label="Poll end time"
+            label="Proposal end time"
             disablePast
           />
         </Stack>

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const mockPolls = [
+const mockProposals = [
   {
     name: "First Past The Post",
     description: "Vote in the first place",
@@ -38,7 +38,7 @@ export function ResultsSelect() {
   return (
     <PageWrapper>
       <Typography
-        variant="h1"
+        variant="h2"
         sx={{
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
@@ -48,7 +48,7 @@ export function ResultsSelect() {
           mr: "auto",
         }}
       >
-        Select poll results
+        Check out results
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <TextField
@@ -62,18 +62,33 @@ export function ResultsSelect() {
         <Button
           variant="contained"
           onClick={() => {
-            navigate(`/vote/${proposalId}`);
+            navigate(`/results/${proposalId}`);
           }}
           sx={{ ml: 2 }}
         >
           Visit results page
         </Button>
       </Box>
-      <RequireConnectedWallet>
+      <Typography
+        variant="h2"
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
+          fontSize: "clamp(1rem, 5vw, 2rem)",
+          ml: "auto",
+          mr: "auto",
+          textAlign: "center",
+          mt: "50px",
+        }}
+      >
+        Or select a proposal you are eligible to vote for
+      </Typography>
+      <RequireConnectedWallet isVoter>
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
-          {mockPolls.map(({ description, name, id }, i) => {
+          {mockProposals.map(({ description, name, id }, i) => {
             return (
               <>
                 <ListItemButton
@@ -102,7 +117,7 @@ export function ResultsSelect() {
                     }
                   />
                 </ListItemButton>
-                {i !== mockPolls.length - 1 && (
+                {i !== mockProposals.length - 1 && (
                   <Divider
                     key={`divider_${i}`}
                     variant="inset"

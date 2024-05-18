@@ -168,9 +168,6 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     Results
                   </LinkMaterial>
                 </MenuItem>
-                <MenuItem>
-                  <Connect />
-                </MenuItem>
               </Box>
             </Drawer>
           </Box>

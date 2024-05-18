@@ -8,6 +8,7 @@ import { VoteSelect } from "./pages/VoteSelect";
 import { ResultsSelect } from "./pages/ResultsSelect";
 import LayoutComponent from "./Layout.js";
 import { Vote } from "./pages/Vote.js";
+import { Results } from "./pages/Results.js";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "results",
         element: <ResultsSelect />,
+      },
+      {
+        path: "results/:id",
+        element: <Results />,
       },
       {
         path: "*",

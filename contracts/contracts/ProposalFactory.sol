@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./ResolutionTypes/FPTPProposal.sol";
@@ -12,7 +12,7 @@ import "./ParticipantTypes/EmailEligibility.sol";
 
 contract ProposalFactory {
     enum VotingResolution { FPTP, RCV, STV, QV }
-    enum VotingParticipant { TokenHolders, NFTHolders, Address }
+    enum VotingParticipant { TokenHolders, NFTHolders, Address, Email }
 
     struct ProposalInstance {
         address contractAddress;
@@ -66,13 +66,13 @@ contract ProposalFactory {
 
         // Create the appropriate voting contract
         if (_resolution == VotingResolution.FPTP) {
-            proposalContract = new FPTPProposal(address(eligibilityContract, _proposalLength));
+            proposalContract = new FPTPProposal(address(eligibilityContract), _proposalLength);
         } else if (_resolution == VotingResolution.RCV) {
-            proposalContract = new RCVProposal(address(eligibilityContract, _proposalLength));
+            proposalContract = new RCVProposal(address(eligibilityContract), _proposalLength);
         } else if (_resolution == VotingResolution.STV) {
-            proposalContract = new STVProposal(address(eligibilityContract, _proposalLength));
+            proposalContract = new STVProposal(address(eligibilityContract), _proposalLength);
         } else if (_resolution == VotingResolution.QV) {
-            proposalContract = new QVProposal(address(eligibilityContract, _proposalLength));
+            proposalContract = new QVProposal(address(eligibilityContract), _proposalLength);
         } else {
             revert UnsupportedVotingResolution();
         }

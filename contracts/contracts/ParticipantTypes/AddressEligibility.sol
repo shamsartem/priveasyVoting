@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./IEligibility.sol";
@@ -31,7 +31,7 @@ contract AddressEligibility is IEligibility {
         eligibleAddresses[_address] = false;
     }
 
-    function isEligible(address _voter) external view override returns (bool) {
+    function isEligible(address _voter, bytes32) external view override returns (bool) {
         return eligibleAddresses[_voter];
     }
 }

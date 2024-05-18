@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./IEligibility.sol";
@@ -7,9 +7,14 @@ contract EmailEligibility is IEligibility {
     mapping(bytes32 => bool) public validVotingIDs;
     mapping(bytes32 => bool) public usedVotingIDs;
     address public admin;
+    bool public isEmailEligibility;
+
+    error InvalidVotingID(bytes32 votingID);
+    error VotingIDAlreadyUsed(bytes32 votingID);
 
     constructor(bytes32[] memory _initialVotingIDs) {
         admin = msg.sender;
+        isEmailEligibility = true;
         for (uint256 i = 0; i < _initialVotingIDs.length; i++) {
             validVotingIDs[_initialVotingIDs[i]] = true;
         }
@@ -35,8 +40,12 @@ contract EmailEligibility is IEligibility {
     }
 
     function useVotingID(bytes32 _votingID) external {
-        require(validVotingIDs[_votingID], "Invalid voting ID");
-        require(!usedVotingIDs[_votingID], "Voting ID already used");
+        if (!validVotingIDs[_votingID]) {
+            revert InvalidVotingID(_votingID);
+        }
+        if (usedVotingIDs[_votingID]) {
+            revert VotingIDAlreadyUsed(_votingID);
+        }
         usedVotingIDs[_votingID] = true;
     }
 }

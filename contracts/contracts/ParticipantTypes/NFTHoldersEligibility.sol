@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./IEligibility.sol";
@@ -14,7 +14,7 @@ contract NFTHoldersEligibility is IEligibility {
         nft = IERC721(_nftAddress);
     }
 
-    function isEligible(address _voter) external view override returns (bool) {
+    function isEligible(address _voter, bytes32) external view override returns (bool) {
         return nft.balanceOf(_voter) > 0;
     }
 }

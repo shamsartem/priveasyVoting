@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.20;
 
 import "./IEligibility.sol";
@@ -14,7 +14,7 @@ contract TokenHoldersEligibility is IEligibility {
         token = IERC20(_tokenAddress);
     }
 
-    function isEligible(address _voter) external view override returns (bool) {
+    function isEligible(address _voter, bytes32) external view override returns (bool) {
         return token.balanceOf(_voter) > 0;
     }
 }

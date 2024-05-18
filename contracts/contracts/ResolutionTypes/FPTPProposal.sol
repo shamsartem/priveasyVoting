@@ -54,6 +54,8 @@ contract FPTPProposal is BaseProposal {
         }
     }
 
+    function vote(uint256[] calldata _candidateId, bytes32 _votingID) public override {}
+
     function declareWinner() public override {
         uint256 winningCandidateId = 0;
         uint256 winningVotes = 0;

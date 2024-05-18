@@ -14,8 +14,8 @@ abstract contract BaseProposal {
     mapping(uint256 => Candidate) public candidates;
     uint256 public candidateCount;
 
-    Types.ProposalType public proposalType;
     Types.EligibilityType public eligibilityType;
+    Types.ProposalType public proposalType;
 
     mapping(address => bool) public hasVoted;
 
@@ -33,6 +33,7 @@ abstract contract BaseProposal {
     error WinnerAlreadyDeclared();
     error WinnerNotDeclared();
     error InvalidVote();
+    error InvalidCandidate();
 
     modifier onlyEligibleVoters(bytes32 _votingID) {
         if (!isEligible(msg.sender, _votingID)) {
@@ -56,6 +57,8 @@ abstract contract BaseProposal {
     function isEligible(address _voter, bytes32 _votingID) public view virtual returns (bool);
 
     function vote(uint256 _candidateId, bytes32 _votingID) public virtual;
+
+    function vote(uint256[] calldata _candidateId, bytes32 _votingID) public virtual;
 
     function getCandidate(uint256 _candidateId) public view returns (string memory, string memory, string memory, uint256) {
         Candidate memory candidate = candidates[_candidateId];

@@ -55,6 +55,8 @@ contract QVProposal is BaseProposal {
         }
     }
 
+    function vote(uint256[] calldata _candidateId, bytes32 _votingID) public override {}
+
     function declareWinner() public override {
         // TODO: Implement QV winner declaration logic
     }

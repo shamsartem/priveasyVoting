@@ -38,12 +38,14 @@ contract STVProposal is BaseProposal {
         return eligibilityContract.isEligible(_voter, _votingID);
     }
 
-    function vote(uint256 _candidateId, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
+    function vote(uint256[] calldata _candidateIds, bytes32 _votingID) public override onlyEligibleVoters(_votingID) withinVotingPeriod {
         if (hasVoted[msg.sender]) {
             revert AlreadyVoted();
         }
-        if (_candidateId >= candidateCount) {
-            revert Types.InvalidCandidate();
+        for (uint256 i = 0; i < _candidateIds.length; i++) {
+            if (_candidateIds[i] >= candidateCount) {
+                revert Types.InvalidCandidate();
+            }
         }
 
         // TODO: Implement STV voting logic
@@ -54,6 +56,9 @@ contract STVProposal is BaseProposal {
             EmailEligibility(address(eligibilityContract)).useVotingID(_votingID);
         }
     }
+    
+    // Placeholder function, STV requires multiple _candidateIds
+    function vote(uint256 _candidateId, bytes32 _votingID) public override {}
 
     function declareWinner() public override {
         // TODO: Implement STV winner declaration logic

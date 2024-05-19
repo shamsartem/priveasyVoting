@@ -10,6 +10,9 @@ ProposalFactory: `0xEf8f786079C7c0F26d02E52A9081a9903D991ba6`
 
 GaslessPaymaster: `0x1C16802A3EFa35cCB057D036bd683700A47aEd4e`
 
+### Ethereum Sepolia
+Proposal Factory: `0x03d8E78B6F8FCaD168c54860cC96e1F5D6AeccDB`
+
 ## Project Description
 
 priveasyVoting is a private voting protocol designed to make creating proposals and voting on them as simple as possible for a wide range of users. With priveasyVoting, anyone can create a proposal and select between multiple options on the voting style as well as who is eligible to vote. Thanks to zkSync's Native Account Abstraction, anyone can vote - for free!

@@ -14,12 +14,14 @@ const mockProposals = [
   {
     name: "What is the best food?",
     description: "Everyone eats food, but what is the best food?",
+    photo: "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
     id: "0x4780d83f1164AAF7A6982Dc64E48e6e150f0D09f",
   },
   {
     name: "Should simpleDAO deploy on zkSync?",
     description:
       "It IS a blockchain and can be deployed to, and simpleDAO loves to deloy on things. So, what do you think?",
+    photo: "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi",
     id: "0x14FbF52E5131a582593B23027301F45c51b6D7a7",
   },
 ];
@@ -48,7 +50,7 @@ export function ProposalsList(props: { isResults?: boolean }) {
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
-          {mockProposals.map(({ description, name, id }, i) => {
+          {mockProposals.map(({ description, name, photo, id }, i) => {
             return (
               <div key={i}>
                 <ListItemButton
@@ -60,7 +62,10 @@ export function ProposalsList(props: { isResults?: boolean }) {
                   }}
                 >
                   <ListItemAvatar>
-                    <Avatar alt={name} src="/static/images/avatar/1.jpg" />
+                    <Avatar
+                      alt={name}
+                      src={`https://${photo}.ipfs.dweb.link/`}
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     primary={name}

@@ -127,6 +127,8 @@ export function Results() {
             <PieChart
               series={[
                 {
+                  arcLabelMinAngle: 45,
+                  arcLabel: (item) => `${item.label} (${item.value})`,
                   data: proposal.candidates.map(({ name, votes }, id) => {
                     return {
                       id,

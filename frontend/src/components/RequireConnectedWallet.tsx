@@ -203,7 +203,7 @@ export function RequireConnectedWallet(
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          fontSize: "clamp(1.2rem, 5vw, 2.3rem)",
+          fontSize: "clamp(1rem, 5vw, 2rem)",
           mb: "15px",
         }}
       >
@@ -252,6 +252,7 @@ export function RequireConnectedWallet(
                   flexDirection: "row",
                   alignItems: "center",
                   width: "100%",
+                  mt: "10px",
                 }}
               >
                 <LogoIcon />

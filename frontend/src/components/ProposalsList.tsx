@@ -9,9 +9,22 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { mockProposals } from "../pages/ResultsSelect.js";
 
-export function ProposalsList() {
+const mockProposals = [
+  {
+    name: "What is the best food?",
+    description: "Everyone eats food, but what is the best food?",
+    id: "0x4780d83f1164AAF7A6982Dc64E48e6e150f0D09f",
+  },
+  {
+    name: "Should simpleDAO deploy on zkSync?",
+    description:
+      "It IS a blockchain and can be deployed to, and simpleDAO loves to deloy on things. So, what do you think?",
+    id: "0x14FbF52E5131a582593B23027301F45c51b6D7a7",
+  },
+];
+
+export function ProposalsList(props: { isResults?: boolean }) {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +42,7 @@ export function ProposalsList() {
           mt: "50px",
         }}
       >
-        Or select a proposal you are eligible to vote for
+        Or select one you are eligible to vote for:
       </Typography>
       <RequireConnectedWallet isVoter>
         <List
@@ -37,13 +50,14 @@ export function ProposalsList() {
         >
           {mockProposals.map(({ description, name, id }, i) => {
             return (
-              <>
+              <div key={i}>
                 <ListItemButton
                   alignItems="flex-start"
                   onClick={() => {
-                    navigate(`/vote/${id}`);
+                    navigate(
+                      props.isResults ? `/results/${id}` : `/vote/${id}`,
+                    );
                   }}
-                  key={i}
                 >
                   <ListItemAvatar>
                     <Avatar alt={name} src="/static/images/avatar/1.jpg" />
@@ -65,13 +79,9 @@ export function ProposalsList() {
                   />
                 </ListItemButton>
                 {i !== mockProposals.length - 1 && (
-                  <Divider
-                    key={`divider_${i}`}
-                    variant="inset"
-                    component="li"
-                  />
+                  <Divider variant="inset" component="li" />
                 )}
-              </>
+              </div>
             );
           })}
         </List>

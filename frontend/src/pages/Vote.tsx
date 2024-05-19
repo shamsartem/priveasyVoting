@@ -124,12 +124,10 @@ export function Vote() {
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          fontSize: "clamp(3rem, 10vw, 3.5rem)",
-          ml: "auto",
-          mr: "auto",
+          fontSize: "clamp(1rem, 5vw, 2rem)",
         }}
       >
-        Vote
+        Vote for:
       </Typography>
       <RequireConnectedWallet isVoter>
         {proposal && id && (

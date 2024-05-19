@@ -65,6 +65,14 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 : "0 1px 2px hsla(210, 0%, 0%, 0.5), 0 2px 12px hsla(210, 100%, 25%, 0.3)",
           })}
         >
+          <LinkMaterial
+            sx={{ mr: "50px" }}
+            component={Link}
+            to="/"
+            onClick={handleClick}
+          >
+            priveasyVoting
+          </LinkMaterial>
           <Box
             sx={{
               flexGrow: 1,
@@ -74,9 +82,6 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
             }}
           >
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <LinkMaterial sx={{ mr: "10px" }} component={Link} to="/">
-                Home
-              </LinkMaterial>
               <LinkMaterial sx={{ mr: "10px" }} component={Link} to="/create">
                 Create
               </LinkMaterial>
@@ -135,7 +140,7 @@ export default function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     to="/"
                     onClick={handleClick}
                   >
-                    Home
+                    priveasyVoting
                   </LinkMaterial>
                 </MenuItem>
                 <MenuItem>

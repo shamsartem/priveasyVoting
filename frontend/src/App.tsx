@@ -51,7 +51,7 @@ export function App() {
   return (
     <>
       <CssBaseline />
-      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
     </>
   );
 }

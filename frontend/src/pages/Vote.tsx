@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { PageWrapper } from "../components/PageWrapper.js";
+import { utils } from "zksync-ethers";
+
 import { RequireConnectedWallet } from "../components/RequireConnectedWallet.js";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { EligibilityType, ProposalType, proposalTypeNames } from "../enums.js";
@@ -214,7 +216,21 @@ function FirstPastThePost(props: { proposal: Proposal; id: string }) {
     error,
   } = useAsync(async () => {
     const contract = new Contract(props.id, baseProposalAbi, await getSigner());
-    const tx = await contract.vote(value, ethers.ZeroHash);
+    const paymasterParams = utils.getPaymasterParams(
+      "0x1C16802A3EFa35cCB057D036bd683700A47aEd4e",
+      {
+        type: "General",
+        innerInput: new Uint8Array(),
+      },
+    );
+
+    const tx = await contract.vote(value, ethers.ZeroHash, {
+      maxPriorityFeePerGas: BigInt(0),
+      customData: {
+        gasPerPubdata: utils.DEFAULT_GAS_PER_PUBDATA_LIMIT,
+        paymasterParams,
+      },
+    });
     waitForReceipt(tx.hash);
     return tx;
   });

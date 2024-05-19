@@ -37,7 +37,7 @@ describe("MyERC20Token", function () {
 
   it("Should allow user to transfer tokens", async function () {
     const transferAmount = ethers.parseEther("50"); // Transfer 50 tokens
-    const tx = await tokenContract.transfer(userWallet.address, transferAmount);
+    const tx = await tokenContract.call(userWallet.address, transferAmount);
     await tx.wait();
     const userBalance = await tokenContract.balanceOf(userWallet.address);
     expect(userBalance).to.equal(transferAmount);
@@ -47,7 +47,7 @@ describe("MyERC20Token", function () {
     const userTokenContract = new Contract(
       await tokenContract.getAddress(),
       tokenContract.interface,
-      userWallet,
+      userWallet
     );
     const burnAmount = ethers.parseEther("100"); // Try to burn 100 tokens
     try {

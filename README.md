@@ -1,6 +1,8 @@
 # priveasyVoting
 Made with ❤️ at ZK Hack Krakow 2024
+
 https://devfolio.co/projects/priveasyvoting-f4be
+
 🏆 2nd Place w/ zkSync
 
 ## Deployments

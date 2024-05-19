@@ -1,5 +1,8 @@
 # priveasyVoting
 Made with ❤️ at ZK Hack Krakow 2024
+https://devfolio.co/projects/priveasyvoting-f4be
+🏆 2nd Place w/ zkSync
+
 ## Deployments
 
 ### Vercel Frontend Deployment
@@ -89,15 +92,8 @@ priveasyVoting is a private voting protocol designed to make creating proposals 
     Voting is open for everyone, but must verify is Sybil
     - 1 WorldcoinID = 1 Vote
 
-## Team and Background
-
-### Tranquil-Flow:
-INFO 
-
-### shamsartem:
-INFO
-
 ## Tutorial
+    https://www.youtube.com/watch?v=WCNBvAhlE3M&embeds_referring_euri=https%3A%2F%2Fdevfolio.co%2F&embeds_referring_origin=https%3A%2F%2Fdevfolio.co&source_ve_path=Mjg2NjY&feature=emb_logo
 
 ### How to Use
 

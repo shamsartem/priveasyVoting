@@ -66,7 +66,9 @@ export function Create() {
     const args = [
       proposalType,
       eligibilityType,
-      tokenAddress === "" ? ethers.ZeroAddress : tokenAddress,
+      eligibilityType === EligibilityType.TokenHolders && tokenAddress !== ""
+        ? tokenAddress
+        : ethers.ZeroAddress,
       proposalLength,
       proposalName,
       proposalDescription,

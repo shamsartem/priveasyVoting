@@ -33,6 +33,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { times } from "lodash";
 import { ethers } from "ethers";
 import LinkMaterial from "@mui/material/Link";
+import { sleep } from "zksync-ethers/build/utils.js";
 
 type CandidateWithVotes = {
   name: string;
@@ -67,6 +68,7 @@ export function Vote() {
       if (id === undefined) {
         return null;
       }
+      await sleep(2000);
 
       const signer = await getSigner();
 

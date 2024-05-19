@@ -177,11 +177,13 @@ Fund the GeneralPaymaster contract:
 ## Future Development Ideas
 - Privacy integration with zkSync's upcoming Validiums
 - Integration of L1 contracts to react to voting results
+- Add on-chain execution of logic from proposals
+- Ability to send unique voting codes through other methods such as via Social Media or SMS
 - Allow for multiple types of voter eligibility in the same proposal
 - Additional voting styles like AV (Approval Voting) & CV (Cumulative Voting)
 - Integrate automated contract callers such as Gelato/Chainlink to call `getWinners` and finalize the proposal results
 - Add restrictions on GaslessPaymaster for deployed proposals
-- Add on-chain execution of logic from proposals
+- Support for mobile devices
 
 
 Made with ❤️ at ZK Hack Krakow 2024

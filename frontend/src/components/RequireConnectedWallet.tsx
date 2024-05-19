@@ -172,17 +172,17 @@ export function RequireConnectedWallet(
   //   </>
   // );
 
-  // const unloggedInView = (
-  //   <Button
-  //     variant="contained"
-  //     onClick={login}
-  //     sx={{
-  //       mt: "10px",
-  //     }}
-  //   >
-  //     Social login
-  //   </Button>
-  // );
+  const unloggedInView = (
+    <Button
+      variant="contained"
+      // onClick={login}
+      sx={{
+        mt: "10px",
+      }}
+    >
+      Social login
+    </Button>
+  );
 
   const { account, connect, disconnect } = useEthereum();
 
@@ -224,12 +224,12 @@ export function RequireConnectedWallet(
       <Button variant="contained" onClick={connect}>
         Connect wallet
       </Button>
-      {/* <div className="container">
-        <div className="grid">{loggedIn ? loggedInView : unloggedInView}</div>
+      <div className="container">
+        <div className="grid">{unloggedInView}</div>
         <div id="console" style={{ whiteSpace: "pre-line" }}>
           <p style={{ whiteSpace: "pre-line" }}></p>
         </div>
-      </div> */}
+      </div>
       {props.isVoter === true ? (
         <IDKitWidget
           app_id="app_staging_9a394b1b163fe32bd97a4c740f54c2bb" // obtained from the Developer Portal
@@ -252,7 +252,6 @@ export function RequireConnectedWallet(
                   flexDirection: "row",
                   alignItems: "center",
                   width: "100%",
-                  mt: "10px",
                 }}
               >
                 <LogoIcon />

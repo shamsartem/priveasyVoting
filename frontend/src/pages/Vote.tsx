@@ -16,6 +16,10 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Avatar,
+  ListItemButton,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
@@ -124,12 +128,10 @@ export function Vote() {
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          fontSize: "clamp(3rem, 10vw, 3.5rem)",
-          ml: "auto",
-          mr: "auto",
+          fontSize: "clamp(1rem, 5vw, 2rem)",
         }}
       >
-        Vote
+        Vote for:
       </Typography>
       <RequireConnectedWallet isVoter>
         {proposal && id && (
@@ -235,16 +237,36 @@ function FirstPastThePost(props: { proposal: Proposal; id: string }) {
           value={value}
           onChange={handleChange}
         >
-          {props.proposal.candidates.map(
-            ({ name, description, photo, votes }, i) => (
-              <FormControlLabel
-                key={i}
-                value={i}
-                control={<Radio />}
-                label={name}
+          {props.proposal.candidates.map(({ name, description, photo }, i) => (
+            <Box sx={{ display: "flex", alignItems: "center", p: "5px" }}>
+              <ListItemAvatar>
+                <Avatar alt={name} src={`https://${photo}.ipfs.dweb.link/`} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <FormControlLabel
+                    sx={{ transform: "translateY(5px)" }}
+                    key={i}
+                    value={i}
+                    control={<Radio />}
+                    label={name}
+                  />
+                }
+                secondary={
+                  <>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {description}
+                    </Typography>
+                  </>
+                }
               />
-            ),
-          )}
+            </Box>
+          ))}
         </RadioGroup>
       </FormControl>
       <Button

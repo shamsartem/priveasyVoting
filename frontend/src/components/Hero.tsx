@@ -47,7 +47,7 @@ export default function Hero() {
               fontSize: "clamp(3rem, 10vw, 3.5rem)",
             }}
           >
-            Voting&nbsp;with&nbsp;
+            priveasy
             <Typography
               component="span"
               variant="h1"
@@ -59,18 +59,44 @@ export default function Hero() {
                     : "primary.light",
               }}
             >
-              zkSync
+              Voting
             </Typography>
           </Typography>
-          {/* <Typography
+          <Typography
             textAlign="center"
             color="text.secondary"
             sx={{ width: { sm: "100%", md: "80%" } }}
           >
-            Explore our cutting-edge dashboard, delivering high-quality
-            solutions tailored to your needs. Elevate your experience with
-            top-tier features and services.
-          </Typography> */}
+            <Typography
+              component="span"
+              sx={{
+                fontSize: "inherit",
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "primary.main"
+                    : "primary.light",
+              }}
+            >
+              priveasyVoting
+            </Typography>{" "}
+            is a private voting protocol designed to make creating proposals and
+            voting on them as simple as possible for a wide range of users. With{" "}
+            <Typography
+              component="span"
+              sx={{
+                fontSize: "inherit",
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "primary.main"
+                    : "primary.light",
+              }}
+            >
+              priveasyVoting
+            </Typography>
+            , anyone can create a proposal and select between multiple options
+            on the voting style as well as who is eligible to vote. Thanks to
+            zkSync's Native Account Abstraction, anyone can vote - for free!
+          </Typography>
         </Stack>
       </Container>
     </Box>

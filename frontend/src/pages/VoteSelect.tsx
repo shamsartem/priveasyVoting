@@ -1,35 +1,9 @@
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import type { Dayjs } from "dayjs";
 import { useState } from "react";
 import { PageWrapper } from "../components/PageWrapper";
-import { RequireConnectedWallet } from "../components/RequireConnectedWallet.js";
-import {
-  Avatar,
-  Divider,
-  List,
-  ListItemButton,
-  ListItemAvatar,
-  ListItemText,
-  TextField,
-  Button,
-} from "@mui/material";
+import { TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-const mockProposals = [
-  {
-    name: "First Past The Post",
-    description: "Vote in the first place",
-    id: "some",
-  },
-  {
-    name: "stuff",
-    description: "Other stuff",
-    id: "other",
-  },
-];
+import { ProposalsList } from "../components/ProposalsList";
 
 export function VoteSelect() {
   const navigate = useNavigate();
@@ -47,7 +21,7 @@ export function VoteSelect() {
           mr: "auto",
         }}
       >
-        Select what you are voting for
+        Select proposal:
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <TextField
@@ -68,6 +42,7 @@ export function VoteSelect() {
           Visit voting page
         </Button>
       </Box>
+      <ProposalsList />
     </PageWrapper>
   );
 }

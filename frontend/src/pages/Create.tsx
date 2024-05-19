@@ -36,6 +36,7 @@ type Candidate = {
 export function Create() {
   const [proposalName, setProposalName] = useState("");
   const [proposalDescription, setProposalDescription] = useState("");
+  const [ipfsCID, setIpfsCID] = useState("");
   const [proposalType, setProposalType] = useState(ProposalType.FPTP);
   const [eligibilityType, setEligibilityType] = useState(
     EligibilityType.TokenHolders,
@@ -293,6 +294,13 @@ export function Create() {
                 newCandidates[index].description = event.target.value;
                 setCandidates(newCandidates);
               }}
+              photoValue={candidate.photo}
+              onPhotoInput={(event) => {
+                const newCandidates = [...candidates];
+                // @ts-ignore
+                newCandidates[index].photo = event.target.value;
+                setCandidates(newCandidates);
+              }}
               delete={() => {
                 const newCandidates = [...candidates];
                 newCandidates.splice(index, 1);
@@ -310,8 +318,7 @@ export function Create() {
                 {
                   name: "",
                   description: "",
-                  photo:
-                    "ipfs://QmZfCpgKQq1kMwzHD1R2SFVNtJLSrATFnbu8EvXmVcWD5E/27138ad7-5088-4c61-8043-239ede78977d.webp",
+                  photo: "",
                 },
               ])
             }
@@ -353,6 +360,8 @@ function Candidate(props: {
   onNameInput: (event: React.FormEvent<HTMLInputElement>) => void;
   descriptionValue: string;
   onDescriptionInput: (event: React.FormEvent<HTMLInputElement>) => void;
+  photoValue: string;
+  onPhotoInput: (event: React.FormEvent<HTMLInputElement>) => void;
   delete: () => void;
 }) {
   return (
@@ -378,6 +387,12 @@ function Candidate(props: {
         sx={{ flex: 1 }}
         value={props.descriptionValue}
         onInput={props.onDescriptionInput}
+      />
+      <TextField
+        label="IPFS CID"
+        sx={{ flex: 1 }}
+        value={props.photoValue}
+        onInput={props.onPhotoInput}
       />
       <Button variant="outlined" startIcon={<Delete />} onClick={props.delete}>
         Delete

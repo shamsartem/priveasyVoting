@@ -5,10 +5,10 @@ import { useEthereum } from "./Context";
 import { PropsWithChildren, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
-import { Web3Auth } from "@web3auth/modal";
-import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base";
-import Web3 from "web3";
-import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+// import { Web3Auth } from "@web3auth/modal";
+// import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base";
+// import Web3 from "web3";
+// import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import {
   IDKitWidget,
   VerificationLevel,
@@ -18,164 +18,164 @@ import {
 const clientId =
   "BPi5PB_UiIZ-cPz1GtV5i1I2iOSOHuimiXBI0e-Oe_u6X3oVAbCiAZOTEBtTXw4tsluTITPqA8zMsfxIKMjiqNQ"; // get from https://dashboard.web3auth.io
 
-const chainConfig = {
-  chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0x13881", // Sepolia Testnet Chain ID in hexadecimal
-  rpcTarget: "https://rpc.sepolia.zksync.io/", // Example RPC endpoint for zkSync Sepolia Testnet
-  displayName: "zkSync Sepolia Testnet",
-  blockExplorerUrl: "https://sepolia.zksync.io/explorer", // Example block explorer for zkSync Sepolia Testnet
-  ticker: "ETH",
-  tickerName: "Ethereum",
-};
+// const chainConfig = {
+//   chainNamespace: CHAIN_NAMESPACES.EIP155,
+//   chainId: "0x13881", // Sepolia Testnet Chain ID in hexadecimal
+//   rpcTarget: "https://rpc.sepolia.zksync.io/", // Example RPC endpoint for zkSync Sepolia Testnet
+//   displayName: "zkSync Sepolia Testnet",
+//   blockExplorerUrl: "https://sepolia.zksync.io/explorer", // Example block explorer for zkSync Sepolia Testnet
+//   ticker: "ETH",
+//   tickerName: "Ethereum",
+// };
 
-const privateKeyProvider = new EthereumPrivateKeyProvider({
-  config: { chainConfig: chainConfig },
-});
+// const privateKeyProvider = new EthereumPrivateKeyProvider({
+//   config: { chainConfig: chainConfig },
+// });
 
-const web3auth = new Web3Auth({
-  clientId,
-  web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
-  privateKeyProvider: privateKeyProvider,
-});
+// const web3auth = new Web3Auth({
+//   clientId,
+//   web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
+//   privateKeyProvider: privateKeyProvider,
+// });
 
 export function RequireConnectedWallet(
   props: PropsWithChildren & { isVoter?: true },
 ) {
-  const [provider, setProvider] = useState<IProvider | null>(null);
-  const [loggedIn, setLoggedIn] = useState(false);
+  // const [provider, setProvider] = useState<IProvider | null>(null);
+  // const [loggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        await web3auth.initModal();
-        setProvider(web3auth.provider);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       await web3auth.initModal();
+  //       setProvider(web3auth.provider);
 
-        if (web3auth.connected) {
-          setLoggedIn(true);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //       if (web3auth.connected) {
+  //         setLoggedIn(true);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    init();
-  }, []);
+  //   init();
+  // }, []);
 
-  const login = async () => {
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
-    if (web3auth.connected) {
-      setLoggedIn(true);
-    }
-  };
+  // const login = async () => {
+  //   const web3authProvider = await web3auth.connect();
+  //   setProvider(web3authProvider);
+  //   if (web3auth.connected) {
+  //     setLoggedIn(true);
+  //   }
+  // };
 
-  const getUserInfo = async () => {
-    const user = await web3auth.getUserInfo();
-    uiConsole(user);
-  };
+  // const getUserInfo = async () => {
+  //   const user = await web3auth.getUserInfo();
+  //   uiConsole(user);
+  // };
 
-  const logout = async () => {
-    await web3auth.logout();
-    setProvider(null);
-    setLoggedIn(false);
-    uiConsole("logged out");
-  };
+  // const logout = async () => {
+  //   await web3auth.logout();
+  //   setProvider(null);
+  //   setLoggedIn(false);
+  //   uiConsole("logged out");
+  // };
 
-  const getAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const web3 = new Web3(provider as any);
+  // const getAccounts = async () => {
+  //   if (!provider) {
+  //     uiConsole("provider not initialized yet");
+  //     return;
+  //   }
+  //   const web3 = new Web3(provider as any);
 
-    // Get user's Ethereum public address
-    const address = await web3.eth.getAccounts();
-    uiConsole(address);
-  };
+  //   // Get user's Ethereum public address
+  //   const address = await web3.eth.getAccounts();
+  //   uiConsole(address);
+  // };
 
-  const getBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const web3 = new Web3(provider as any);
+  // const getBalance = async () => {
+  //   if (!provider) {
+  //     uiConsole("provider not initialized yet");
+  //     return;
+  //   }
+  //   const web3 = new Web3(provider as any);
 
-    // Get user's Ethereum public address
-    const address = (await web3.eth.getAccounts())[0];
+  //   // Get user's Ethereum public address
+  //   const address = (await web3.eth.getAccounts())[0];
 
-    // Get user's balance in ether
-    const balance = web3.utils.fromWei(
-      await web3.eth.getBalance(address), // Balance is in wei
-      "ether",
-    );
-    uiConsole(balance);
-  };
+  //   // Get user's balance in ether
+  //   const balance = web3.utils.fromWei(
+  //     await web3.eth.getBalance(address), // Balance is in wei
+  //     "ether",
+  //   );
+  //   uiConsole(balance);
+  // };
 
-  const signMessage = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    const web3 = new Web3(provider as any);
+  // const signMessage = async () => {
+  //   if (!provider) {
+  //     uiConsole("provider not initialized yet");
+  //     return;
+  //   }
+  //   const web3 = new Web3(provider as any);
 
-    // Get user's Ethereum public address
-    const fromAddress = (await web3.eth.getAccounts())[0];
+  //   // Get user's Ethereum public address
+  //   const fromAddress = (await web3.eth.getAccounts())[0];
 
-    const originalMessage = "YOUR_MESSAGE";
+  //   const originalMessage = "YOUR_MESSAGE";
 
-    // Sign the message
-    const signedMessage = await web3.eth.personal.sign(
-      originalMessage,
-      fromAddress,
-      "test password!", // configure your own password here.
-    );
-    uiConsole(signedMessage);
-  };
+  //   // Sign the message
+  //   const signedMessage = await web3.eth.personal.sign(
+  //     originalMessage,
+  //     fromAddress,
+  //     "test password!", // configure your own password here.
+  //   );
+  //   uiConsole(signedMessage);
+  // };
 
-  function uiConsole(...args: any[]): void {
-    const el = document.querySelector("#console>p");
-    if (el) {
-      el.innerHTML = JSON.stringify(args || {}, null, 2);
-    }
-    console.log(...args);
-  }
+  // function uiConsole(...args: any[]): void {
+  //   const el = document.querySelector("#console>p");
+  //   if (el) {
+  //     el.innerHTML = JSON.stringify(args || {}, null, 2);
+  //   }
+  //   console.log(...args);
+  // }
 
-  const loggedInView = (
-    <>
-      <div className="flex-container">
-        <div>
-          <button onClick={getUserInfo} className="card">
-            Get User Info
-          </button>
-        </div>
-        <div>
-          <button onClick={getAccounts} className="card">
-            Get Accounts
-          </button>
-        </div>
-        <div>
-          <button onClick={getBalance} className="card">
-            Get Balance
-          </button>
-        </div>
-        <div>
-          <button onClick={signMessage} className="card">
-            Sign Message
-          </button>
-        </div>
-        <div>
-          <button onClick={logout} className="card">
-            Log Out
-          </button>
-        </div>
-      </div>
-    </>
-  );
+  // const loggedInView = (
+  //   <>
+  //     <div className="flex-container">
+  //       <div>
+  //         <button onClick={getUserInfo} className="card">
+  //           Get User Info
+  //         </button>
+  //       </div>
+  //       <div>
+  //         <button onClick={getAccounts} className="card">
+  //           Get Accounts
+  //         </button>
+  //       </div>
+  //       <div>
+  //         <button onClick={getBalance} className="card">
+  //           Get Balance
+  //         </button>
+  //       </div>
+  //       <div>
+  //         <button onClick={signMessage} className="card">
+  //           Sign Message
+  //         </button>
+  //       </div>
+  //       <div>
+  //         <button onClick={logout} className="card">
+  //           Log Out
+  //         </button>
+  //       </div>
+  //     </div>
+  //   </>
+  // );
 
   const unloggedInView = (
     <Button
       variant="contained"
-      onClick={login}
+      // onClick={login}
       sx={{
         mt: "10px",
       }}
@@ -203,7 +203,7 @@ export function RequireConnectedWallet(
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
-          fontSize: "clamp(1.2rem, 5vw, 2.3rem)",
+          fontSize: "clamp(1rem, 5vw, 2rem)",
           mb: "15px",
         }}
       >
@@ -225,7 +225,7 @@ export function RequireConnectedWallet(
         Connect wallet
       </Button>
       <div className="container">
-        <div className="grid">{loggedIn ? loggedInView : unloggedInView}</div>
+        <div className="grid">{unloggedInView}</div>
         <div id="console" style={{ whiteSpace: "pre-line" }}>
           <p style={{ whiteSpace: "pre-line" }}></p>
         </div>

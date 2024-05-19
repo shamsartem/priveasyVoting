@@ -1,14 +1,18 @@
-# DAPPNAME
-
+# priveasyVoting
+Made with ❤️ at ZK Hack Krakow 2024
 ## Deployments
+
+### Vercel Frontend Deployment
+https://priveasy-voting.vercel.app
 
 ### zkSync Sepolia
 ProposalFactory: `0xEf8f786079C7c0F26d02E52A9081a9903D991ba6`
+
 GaslessPaymaster: `0x1C16802A3EFa35cCB057D036bd683700A47aEd4e`
 
 ## Project Description
 
-DAPPNAME is a private voting protocol designed to make creating proposals and voting on them as simple as possible for a wide range of users. With DAPPNAME, anyone can create a proposal and select between multiple options on the voting style as well as who is eligible to vote. Thanks to zkSync's Native Account Abstraction, anyone can vote - for free!
+priveasyVoting is a private voting protocol designed to make creating proposals and voting on them as simple as possible for a wide range of users. With priveasyVoting, anyone can create a proposal and select between multiple options on the voting style as well as who is eligible to vote. Thanks to zkSync's Native Account Abstraction, anyone can vote - for free!
 
 ### Problems Solving
 - **Public voting:** On public blockchains, voting data can be seen at any point. This reveals what individual addresses are voting for. Additionally, subsequent voters can see what prior users have voted for which can bias their decision.
@@ -90,12 +94,10 @@ INFO
 ### shamsartem:
 INFO
 
-## Problems Faced
-- problems
-
 ## Tutorial
 
 ### How to Use
+
 1. Create a Proposal
 
     Navigate to the "Create Proposal" page.
@@ -184,6 +186,4 @@ Fund the GeneralPaymaster contract:
 - Integrate automated contract callers such as Gelato/Chainlink to call `getWinners` and finalize the proposal results
 - Add restrictions on GaslessPaymaster for deployed proposals
 - Support for mobile devices
-
-
-Made with ❤️ at ZK Hack Krakow 2024
+- Integrated support for uploading to IPFS through the website

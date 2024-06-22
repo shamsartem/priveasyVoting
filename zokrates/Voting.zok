@@ -1,0 +1,2 @@
+def main(private field candidateID) -> bool:
+    return true
